@@ -22,8 +22,8 @@ public class ElYoum8Application {
         long endTimeInSeconds = System.currentTimeMillis()/1000;
         System.out.println("Process done in " + (endTimeInSeconds - startTimeInSeconds) + " seconds");
         }
-        if(studentRepository.getRecordRank()==null || studentRepository.getRecordRank().equals(0))
-            migerations.assignRanksInMemmoryAsync();
+        if(studentRepository.getMinRank()==null)
+            migerations.assignRanksUsingNativeQuery();
     }
 
 

@@ -42,6 +42,12 @@ public class StudentController {
     @GetMapping("/sorted")
     public List<Student>getAllSorted(@RequestParam Integer page , @RequestParam Integer size )
     {
-        return studentRepository.findAllByOrderByTotalDegreeDescArabicNameAsc(PageRequest.of(page,size));
+        return studentRepository.findAllByOrderByPercentageDescArabicNameAsc(PageRequest.of(page,size));
+    }
+
+    @GetMapping("/part")
+    public List<Student>getAllBetween(@RequestParam Long from , @RequestParam Long to)
+    {
+        return studentRepository.findAllBetween(from, to);
     }
 }

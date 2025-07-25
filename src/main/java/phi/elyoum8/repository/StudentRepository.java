@@ -22,10 +22,10 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
     public List<Student>findAllByTotalDegreeBetween(Double from, Double to);
     public List<Student>findGreaterByTotalDegree(Double degree);
 
-    List<Student> findAllByOrderByTotalDegreeDescArabicNameAsc(Pageable pageable);
+    List<Student> findAllByOrderByPercentageDescArabicNameAsc(Pageable pageable);
 
-    @Query(value = "SELECT student_rank FROM student WHERE seat_number=1859654;",nativeQuery = true)
-    public Long getRecordRank();
+    @Query(value = "SELECT student_rank FROM student AS s WHERE s.percentage = (SELECT MIN(t.percentage) FROM student AS t) LIMIT 1 ;",nativeQuery = true)
+    public Long getMinRank();
 
     @Query(value = "SELECT * FROM student ORDER BY total_degree DESC;" ,nativeQuery = true)
     public List<Student>findTopNStudent(Pageable pageable);
@@ -58,13 +58,30 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
     Boolean areAllInserted(@Param("sheetSize")Long sheetSize);
 
 
+    @Transactional
     @Modifying
     @Query(value = """
             UPDATE student s
             JOIN (
                 SELECT seat_number,
-                       RANK() OVER (ORDER BY total_degree DESC, arabic_name ASC) AS rank_with_duplicates,
-                       ROW_NUMBER() OVER (ORDER BY total_degree DESC, arabic_name ASC) AS  student_rank
+                       DENSE_RANK() OVER (ORDER BY percentage DESC) AS rank_with_duplicates,
+                       ROW_NUMBER() OVER (ORDER BY percentage DESC, arabic_name ASC) AS  student_rank
+                FROM student
+            ) r ON s.seat_number = r.seat_number
+            SET s.student_rank = r.student_rank,
+                s.rank_with_duplicates = r.rank_with_duplicates;
+        """,nativeQuery = true)
+    public void setRanks();
+
+
+    @Transactional
+    @Modifying
+    @Query(value = """
+            UPDATE student s
+            JOIN (
+                SELECT seat_number,
+                       DENSE_RANK() OVER (ORDER BY percentage DESC) AS rank_with_duplicates,
+                       ROW_NUMBER() OVER (ORDER BY percentage DESC, arabic_name ASC) AS  student_rank
                 FROM student
                 WHERE seat_number BETWEEN :startSeatNumber AND :endSeatNumber
             ) r ON s.seat_number = r.seat_number
@@ -72,7 +89,12 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
                 s.rank_with_duplicates = r.rank_with_duplicates
             WHERE s.seat_number BETWEEN :startSeatNumber AND :endSeatNumber
         """,nativeQuery = true)
-    public void setRanks(@Param("startSeatNumber")long startSeatNumber, @Param("endSeatNumber")long endSeatNumber);
+    public void setRanksInBatch(@Param("startSeatNumber")long startSeatNumber, @Param("endSeatNumber")long endSeatNumber);
+
+
+    @Query(value = """
+                      SELECT * FROM  student AS s WHERE s.seat_number BETWEEN :from_id AND :to_id ORDER BY s.seat_number ASC;""" ,nativeQuery = true)
+    public List<Student>findAllBetween(@Param("from_id")Long from, @Param("to_id")Long to);
 
 
     @Transactional

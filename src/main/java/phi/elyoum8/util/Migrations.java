@@ -32,7 +32,7 @@ public class Migrations {
     private final int BATCH_SIZE = 1000;
     @Value("${sheet.size}") Long sheetSize;
 
-    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private final ExecutorService executor ;
 
     private final StudentRepository studentRepository;
     private final EntityManager entityManager;
@@ -89,25 +89,26 @@ public class Migrations {
            for(Future<?>proccess : proccesses)
            {
                proccess.get();
-               log.info("{} rows are inserted in the Database",studentRepository.countStudent());
+               //log.info("{} rows are inserted in the Database",studentRepository.countStudent());
            }
            log.info("--------All Records inserted Successfully-----------");
-           Thread ranksThread = new Thread(()->assignRanksInMemmoryAsync());
+           //Thread ranksThread = new Thread(()->assignRanksInMemmoryAsync());
 
            //while (!studentRepository.areAllInserted(sheetSize))
-            while (studentRepository.countStudent()!=sheetSize)
+            /*while (studentRepository.countStudent()!=sheetSize)
            {
                try{
                    log.warn("Waiting to set Ranks, because still inserting rows in the database!!");
                    ranksThread.sleep(60*1000);
                }catch(InterruptedException e){}
-           }
+           }*/
             long startTime = System.currentTimeMillis()/1000;
             log.info("Ranks are being setting right now!");
-           ranksThread.start();
+          /* ranksThread.start();
            try{
                ranksThread.join();
-           }catch(InterruptedException e){log.error("ranks thread interrupted!!");}
+           }catch(InterruptedException e){log.error("ranks thread interrupted!!");}*/
+            assignRanksUsingNativeQuery();
            long endTime = System.currentTimeMillis()/1000;
            log.info("-----Ranks updated successfully in {} seconds!------",endTime-startTime);
 
@@ -115,10 +116,7 @@ public class Migrations {
             log.error("Error reading file --> " + fileName);
         }catch (InterruptedException  | ExecutionException ex){
             log.error("Error Handling The Async Process!");
-        }finally {
-        executor.shutdown();
         }
-
     }
 
 
@@ -138,13 +136,19 @@ public class Migrations {
         entityManager.createNativeQuery(query).executeUpdate();
     }
 
-    @Transactional
-    public void assignRanksInBatch()
+    public void assignRanksUsingNativeQuery()
+    {
+            studentRepository.setRanks();
+            entityManager.flush();
+            entityManager.clear();
+    }
+
+    public void assignRanksInBatch() // Not logicaly correct
     {
         long maxSeatNumber =((Number) entityManager.createNativeQuery("SELECT MAX(s.seat_number) FROM student AS s;").getSingleResult()).longValue();
         for(long startSeatNumber=0; startSeatNumber<=maxSeatNumber; startSeatNumber+= BATCH_SIZE)
         {
-            studentRepository.setRanks(startSeatNumber,startSeatNumber+BATCH_SIZE);
+            studentRepository.setRanksInBatch(startSeatNumber,startSeatNumber+BATCH_SIZE);
             entityManager.flush();
             entityManager.clear();
         }
@@ -153,91 +157,97 @@ public class Migrations {
 
     public void assignRanksInMemmory() {
         log.info("Assigning Ranks......");
-        List<Student> students = studentRepository.findAllByOrderByTotalDegreeDescArabicNameAsc(PageRequest.of(0,10));
-        log.info("Data Fetched.....");
-        long currentRank = 1;
-        long rankWithDuplicates = 1;
-        Double previousDegree = null;
-        long sameDegreeCount = 0;
+        int page=0;
+        while(true) {
+            List<Student> students = studentRepository.findAllByOrderByPercentageDescArabicNameAsc(PageRequest.of(page++, 100000));
+            if (students.isEmpty()) break;
+            log.info("Data Fetched.....");
+            long currentRank = 1;
+            long rankWithDuplicates = 1;
+            Double previousDegree = null;
+            long sameDegreeCount = 0;
 
 
-        for (int i = 0; i < students.size(); i++)
-        {
-            Student student = students.get(i);
-            Double currentDegree = student.getTotalDegree();
+            for (int i = 0; i < students.size(); i++) {
+                Student student = students.get(i);
+                Double currentDegree = student.getTotalDegree();
 
-            if (previousDegree != null && currentDegree.equals(previousDegree)) {
-                student.setStudentRank(currentRank);
-                student.setRankWithDuplicates(rankWithDuplicates);
-                sameDegreeCount++;
-            } else {
-                currentRank = i + 1 - sameDegreeCount;
-                student.setStudentRank(currentRank);
-                student.setRankWithDuplicates(rankWithDuplicates);
-                sameDegreeCount = 0;
+                if (previousDegree != null && currentDegree.equals(previousDegree)) {
+                    student.setStudentRank(currentRank);
+                    student.setRankWithDuplicates(rankWithDuplicates);
+                    sameDegreeCount++;
+                } else {
+                    currentRank = i + 1 - sameDegreeCount;
+                    student.setStudentRank(currentRank);
+                    student.setRankWithDuplicates(rankWithDuplicates);
+                    sameDegreeCount = 0;
+                }
+                previousDegree = currentDegree;
+                rankWithDuplicates++;
             }
-            previousDegree = currentDegree;
-            rankWithDuplicates++;
+            log.info("Ranks modified.....");
+            studentRepository.saveAll(students);
+            log.info("Ranks updated in the Database Successfully!");
         }
-        log.info("Ranks modified.....");
-        studentRepository.saveAll(students);
-        log.info("Ranks updated in the Database Successfully!");
     }
 
     public void assignRanksInMemmoryAsync() {
         log.info("Assigning Ranks......");
-        List<Student> students = studentRepository.findAllByOrderByTotalDegreeDescArabicNameAsc(PageRequest.of(0,10));
-        log.info("Data Fetched.....");
-        long currentRank = 1;
-        long rankWithDuplicates = 1;
-        Double previousDegree = null;
-        long sameDegreeCount = 0;
-
-        List<Future<?>> processes = new ArrayList<>();
-        List<Student>currentBatch = new ArrayList<>();
-
-        for (int i = 0; i < students.size(); i++)
+        int page=0;
+        while (true)
         {
-            Student student = students.get(i);
-            Double currentDegree = student.getTotalDegree();
+            List<Student> students = studentRepository.findAllByOrderByPercentageDescArabicNameAsc(PageRequest.of(page++, 50000));
+            if (students.isEmpty())break;
+            log.info("Data Fetched.....");
+            long currentRank = 1;
+            long rankWithDuplicates = 1;
+            Double previousDegree = null;
+            long sameDegreeCount = 0;
 
-            if (previousDegree != null && currentDegree.equals(previousDegree)) {
-                student.setStudentRank(currentRank);
+            List<Future<?>> processes = new ArrayList<>();
+            List<Student> currentBatch = new ArrayList<>();
+
+            for (int i = 0; i < students.size(); i++) {
+                Student student = students.get(i);
+                Double currentDegree = student.getPercentage();
+
+                if (previousDegree != null && currentDegree.equals(previousDegree)) {
+                    sameDegreeCount++;
+                } else {
+                    rankWithDuplicates = i + 1 - sameDegreeCount;
+                    sameDegreeCount = 0;
+                }
+                student.setStudentRank(currentRank++);
                 student.setRankWithDuplicates(rankWithDuplicates);
-                sameDegreeCount++;
-            } else {
-                rankWithDuplicates = i + 1 - sameDegreeCount;
-                student.setStudentRank(currentRank);
-                student.setRankWithDuplicates(rankWithDuplicates);
-                sameDegreeCount = 0;
+
+                previousDegree = currentDegree;
+
+                currentBatch.add(student);
+                if (currentBatch.size() >= BATCH_SIZE) {
+                    var tempBatch = new ArrayList<>(currentBatch);
+                    processes.add(
+                            executor.submit(() -> studentRepository.saveAll(tempBatch))
+                    );
+                    currentBatch.clear();
+                    log.info("{} Student's rank updated in yhe Database", i);
+                }
             }
-            previousDegree = currentDegree;
-            currentRank++;
-
-            currentBatch.add(student);
-            if(currentBatch.size()>=BATCH_SIZE)
-            {
+            if (!currentBatch.isEmpty()) {
                 var tempBatch = new ArrayList<>(currentBatch);
                 processes.add(
-                        executor.submit(()->studentRepository.saveAll(tempBatch))
+                        executor.submit(() -> studentRepository.saveAll(tempBatch))
                 );
+                //log.info("{} Student's rank updated in the Database,currentBatch.size()");
                 currentBatch.clear();
-                log.info("{} Student's rank updated in yhe Database",i);
+            }
+            log.info("5000 modified and sent to the Database!");
+            try {
+                for (var process : processes) process.get();
+            } catch (InterruptedException | ExecutionException e) {
+            } finally {
+                //executor.shutdown();
             }
         }
-        if(!currentBatch.isEmpty())
-        {
-            var tempBatch = new ArrayList<>(currentBatch);
-            processes.add(
-                    executor.submit(()->studentRepository.saveAll(tempBatch))
-            );
-            currentBatch.clear();
-            log.info("All Student's rank updated in yhe Database");
-        }
-        log.info("Ranks modified and sent to the Database!");
-        try{
-        for (var process : processes) process.get();
-        }catch (InterruptedException | ExecutionException e){}
         log.info("Ranks updated in the Database Successfully!");
     }
 
@@ -309,13 +319,13 @@ public class Migrations {
         } catch (InterruptedException | ExecutionException ex) {
             log.error("Error Handling The Async Process!", ex);
         } finally {
-            executor.shutdown();
+            //executor.shutdown();
             try {
                 if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
-                    executor.shutdownNow();
+                   // executor.shutdownNow();
                 }
             } catch (InterruptedException e) {
-                executor.shutdownNow();
+                //executor.shutdownNow();
                 Thread.currentThread().interrupt();
             }
         }

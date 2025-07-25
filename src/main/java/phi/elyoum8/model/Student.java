@@ -14,7 +14,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name="student"
         ,indexes = {@Index(name = "idx_arabic_name",columnList = "arabic_name")
-                   ,@Index(name = "idx_student_degree_name", columnList = "total_degree DESC, arabic_name ASC")})
+                   ,@Index(name = "idx_student_percentage_name", columnList = "percentage DESC, arabic_name ASC")})
 public class Student {
 
     @Id
@@ -38,7 +38,7 @@ public class Student {
     public void setTotalDegree(double totalDegree)
     {
         this.totalDegree = totalDegree;
-        this.percentage = (totalDegree/320)*100;
+        this.percentage = (totalDegree/(totalDegree>=320?410:320))*100;
         this.percentage = Math.round(percentage*1000.0)/1000.0;
     }
 }
