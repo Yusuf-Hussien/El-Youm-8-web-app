@@ -22,19 +22,6 @@
     <button type="submit" class="btn btn-primary">بحث</button>
   </form>
 
-
-  <!-- With in style-->
-  <!--<div style="background-color: #f0f0f0; padding: 20px;">
-    <form id="studentForm" method="get" th:object="${formData}" onsubmit="return updateFormAction()">
-      <div class="form-group" style="margin-bottom: 15px;">
-        <label for="seatNumberInput" style="font-weight: bold;">رقم الجلوس</label>
-        <input type="text" th:field="*{text}" class="form-control" id="seatNumberInput" aria-describedby="emailHelp"
-               placeholder="رقم الجلوس" style="border: 2px solid #007bff; padding: 8px;">
-      </div>
-      <button type="submit" class="btn btn-primary" style="background-color: #007bff; color: white;">بحث</button>
-    </form>
-  </div>-->
-
   <!-- Student Result -->
   <div class="RightSide" th:if="${student}">
     <div class="halfinput-student">
@@ -82,19 +69,6 @@
   <!-- Error Message -->
   <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
-  <!-- JavaScript for Form Validation -->
-  <script>
-    function updateFormAction() {
-      const seatNumber = document.getElementById('seatNumberInput').value;
-      if (!seatNumber || !/^\d+$/.test(seatNumber)) {
-        alert('Please enter a valid seat number (numeric only).');
-        return false;
-      }
-      const form = document.getElementById('studentForm');
-      form.action = '/natega/students/' + encodeURIComponent(seatNumber);
-      return true;
-    }
-  </script>
 </section>
 </body>
 </html>
