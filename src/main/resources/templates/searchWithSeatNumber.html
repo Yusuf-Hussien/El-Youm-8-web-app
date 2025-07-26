@@ -1,9 +1,7 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<body>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="layout :: layout('Search by Seat Number', 'seat', ~{::div})">
 
-
-<div th:replace="layout :: layout('Search by Seat Number', 'seat', ~{::div})">
-  <div th:fragment="content">
+  <div>
 
   <!-- Form -->
   <form id="studentForm" method="post" th:action="@{/natega/searchWithSeatNumber}" th:object="${seatNumberForm}" >
@@ -99,6 +97,5 @@
     }
   </script>
 </div>
-</div>
-</body>
+
 </html>
