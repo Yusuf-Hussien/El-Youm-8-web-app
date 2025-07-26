@@ -18,7 +18,7 @@ public class ElYoum8Application {
         {
         long startTimeInSeconds = System.currentTimeMillis()/1000;
             studentRepository.deleteAllStudents();
-            migerations.migrateFromCsvToDatabase("natega_2025_arabic.csv");
+            migerations.migrateFromCsvToDatabase("natega_2025.csv");
         long endTimeInSeconds = System.currentTimeMillis()/1000;
         System.out.println("Process done in " + (endTimeInSeconds - startTimeInSeconds) + " seconds");
         }

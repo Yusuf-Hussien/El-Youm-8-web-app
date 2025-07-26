@@ -1,0 +1,144 @@
+.container {
+    margin: 20px;
+    padding: 20px;
+}
+
+.input-field {
+    padding: 8px;
+    margin-right: 10px;
+    width: 200px;
+}
+
+.submit-button {
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.error {
+    color: red;
+    margin-top: 10px;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+
+<!--  Student Style  -->
+.RightSide {
+    width: calc(100% - 360px);
+    float: right;
+    padding: 20px;
+    border: 1px solid #e7e7e7;
+}
+
+@media (max-width: 768px) {
+    .RightSide {
+        float: none;
+        width: 100%;
+    }
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+body {
+    direction: rtl;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+    background-color: #fff;
+}
+
+@media (max-width: 768px) {
+    .halfinput-student {
+        width: 100%;
+    }
+}
+
+.halfinput-student {
+    color: #fff;
+    width: 100%;
+    margin-top: 10px;
+    height: 43px;
+    font-weight: bolder;
+    border: 1px solid #f1f1f1;
+    font-family: 'Thfont';
+    outline-color: #f1f1f1;
+    text-align: center;
+    color: red;
+    line-height: 1.9;
+    font-size: 26px;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+    background-color: #fff;
+}
+
+.full-result {
+    width: 100%;
+    margin-top: 10px;
+    border-top: 1px solid #f1f1f1;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: right;
+    background-color: #fff;
+}
+
+
+
+
+<!--new added-->
+    .container {
+        margin-right: 300px;
+    }
+.formatt3, .formatt {
+    display: block;
+    font-weight: bold;
+}
+.resultItem {
+    text-align: center;
+}
+.clear {
+    clear: both;
+}
+.RightSide {
+    margin-top: 20px;
+}
+.halfinput-student, .data-result, .full-result {
+    margin-bottom: 20px;
+}
+.table {
+    margin-top: 20px;
+}
+.pagination {
+    margin-top: 20px;
+}

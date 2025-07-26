@@ -159,7 +159,7 @@ public class Migrations {
         log.info("Assigning Ranks......");
         int page=0;
         while(true) {
-            List<Student> students = studentRepository.findAllByOrderByPercentageDescArabicNameAsc(PageRequest.of(page++, 100000));
+            List<Student> students = studentRepository.findAllByOrderByPercentageDescArabicNameAsc(PageRequest.of(page++, 100000)).getContent();
             if (students.isEmpty()) break;
             log.info("Data Fetched.....");
             long currentRank = 1;
@@ -196,7 +196,7 @@ public class Migrations {
         int page=0;
         while (true)
         {
-            List<Student> students = studentRepository.findAllByOrderByPercentageDescArabicNameAsc(PageRequest.of(page++, 50000));
+            List<Student> students = studentRepository.findAllByOrderByPercentageDescArabicNameAsc(PageRequest.of(page++, 50000)).getContent();
             if (students.isEmpty())break;
             log.info("Data Fetched.....");
             long currentRank = 1;

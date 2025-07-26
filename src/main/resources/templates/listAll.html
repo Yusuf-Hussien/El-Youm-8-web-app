@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: layout(title='List All Students', activePage='all', content=~{::div})}">
+<div>
+    <h6>جميع الطلاب</h6>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>رقم الجلوس</th>
+            <th>الاسم</th>
+            <th>مجموع الدرجات</th>
+            <th>النسبة المئوية</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.seatNumber}"></td>
+            <td th:text="${student.arabicName}"></td>
+            <td th:text="${student.totalDegree}"></td>
+            <td th:text="${student.percentage} + ' %'"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination Controls -->
+    <nav aria-label="Page navigation" th:if="${totalPages > 1}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:class="${currentPage == 0} ? 'disabled'">
+                <a class="page-link" th:href="@{/natega/listAll(page=${currentPage - 1})}">السابق</a>
+            </li>
+            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                th:class="${i == currentPage} ? 'active'">
+                <a class="page-link" th:href="@{/natega/listAll(page=${i})}" th:text="${i + 1}"></a>
+            </li>
+            <li class="page-item" th:class="${currentPage == totalPages - 1} ? 'disabled'">
+                <a class="page-link" th:href="@{/natega/listAll(page=${currentPage + 1})}">التالي</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+</html>

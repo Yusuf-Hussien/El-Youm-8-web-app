@@ -1,6 +1,7 @@
 package phi.elyoum8.repository;
 
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,7 +23,7 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
     public List<Student>findAllByTotalDegreeBetween(Double from, Double to);
     public List<Student>findGreaterByTotalDegree(Double degree);
 
-    List<Student> findAllByOrderByPercentageDescArabicNameAsc(Pageable pageable);
+    Page<Student> findAllByOrderByPercentageDescArabicNameAsc(Pageable pageable);
 
     @Query(value = "SELECT student_rank FROM student AS s WHERE s.percentage = (SELECT MIN(t.percentage) FROM student AS t) LIMIT 1 ;",nativeQuery = true)
     public Long getMinRank();
