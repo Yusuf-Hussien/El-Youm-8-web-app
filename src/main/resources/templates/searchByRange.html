@@ -1,7 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout :: layout(title='Search by Seat Range', activePage='range', content=~{::div})}">
-<div>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title layout:title="Search by Seat Range">Search</title>
+</head>
+
+<body>
+<section layout:fragment="content">
     <form method="post" th:action="@{/natega/searchByRange}" th:object="${seatNumbers}" >
         <div class="form-group">
             <label for="startSeat">رقم الجلوس الأول</label>
@@ -43,5 +50,6 @@
             </tbody>
         </table>
     </div>
-</div>
+</section>
+</body>
 </html>

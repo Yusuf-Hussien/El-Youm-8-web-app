@@ -1,7 +1,16 @@
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="layout :: layout('Search by Seat Number', 'seat', ~{::div})">
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title layout:title="Search by Seat Number">Search</title>
+</head>
 
-  <div>
+
+<body>
+
+  <section layout:fragment="content">
 
   <!-- Form -->
   <form id="studentForm" method="post" th:action="@{/natega/searchWithSeatNumber}" th:object="${seatNumberForm}" >
@@ -12,16 +21,6 @@
     </div>
     <button type="submit" class="btn btn-primary">بحث</button>
   </form>
-
-  <!-- Form with-in validatitain using JS
-  <form id="studentForm" method="get" th:object="${formData}" onsubmit="return updateFormAction()">
-    <div class="form-group">
-      <label for="seatNumberInput">رقم الجلوس</label>
-      <input type="text" th:field="*{text}" class="form-control" id="seatNumberInput" aria-describedby="emailHelp"
-             placeholder="رقم الجلوس" required>
-    </div>
-    <button type="submit" class="btn btn-primary">بحث</button>
-  </form>-->
 
 
   <!-- With in style-->
@@ -96,6 +95,6 @@
       return true;
     }
   </script>
-</div>
-
+</section>
+</body>
 </html>

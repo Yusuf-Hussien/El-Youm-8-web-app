@@ -1,15 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{layout :: layout(title='List All Students', activePage='all', content=~{::div})}">
-<div>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title layout:title="List All Students">Search</title>
+</head>
+
+<body>
+<section layout:fragment="content">
     <h6>جميع الطلاب</h6>
-    <table class="table table-striped">
+    <table class="table">
         <thead>
         <tr>
             <th>رقم الجلوس</th>
             <th>الاسم</th>
             <th>مجموع الدرجات</th>
             <th>النسبة المئوية</th>
+            <th>الترتيب</th>
+            <th>الترتيب مكرر</th>
+
         </tr>
         </thead>
         <tbody>
@@ -18,6 +28,9 @@
             <td th:text="${student.arabicName}"></td>
             <td th:text="${student.totalDegree}"></td>
             <td th:text="${student.percentage} + ' %'"></td>
+            <td th:text="${student.studentRank}"></td>
+            <td th:text="${student.rankWithDuplicates}"></td>
+
         </tr>
         </tbody>
     </table>
@@ -37,5 +50,6 @@
             </li>
         </ul>
     </nav>
-</div>
+</section>
+</body>
 </html>
