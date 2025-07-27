@@ -17,46 +17,16 @@ import java.util.List;
 public interface StudentRepository extends JpaRepository<Student,Long> {
 
     public Student findBySeatNumber(long id);
-    public List<Student> findAllByArabicName(String name);
-    public List<Student> findAllByTotalDegree(Double degree);
-
-    public List<Student>findAllByTotalDegreeBetween(Double from, Double to);
-    public List<Student>findGreaterByTotalDegree(Double degree);
 
     Page<Student> findAllByOrderByPercentageDescArabicNameAsc(Pageable pageable);
-
-    @Query(value = "SELECT student_rank FROM student AS s WHERE s.percentage = (SELECT MIN(t.percentage) FROM student AS t) LIMIT 1 ;",nativeQuery = true)
-    public Long getMinRank();
-
-    @Query(value = "SELECT * FROM student ORDER BY total_degree DESC;" ,nativeQuery = true)
-    public List<Student>findTopNStudent(Pageable pageable);
-
-    @Query(value = "select count(s.seat_number) from student as s;",nativeQuery = true)
-    public Long countStudent();
-
-    @Query(value = "SELECT * FROM student WHERE arabic_name = :name ;", nativeQuery = true)
-    List<Student> findAllStudentsByNameLike(@Param("name") String name);
 
     @Query(value = "SELECT * FROM student WHERE arabic_name LIKE CONCAT(:name, '%')", nativeQuery = true)
     List<Student> findAllStudentsByNameStartsWith(@Param("name") String name);
 
 
     @Query(value = """
-                      SELECT CASE
-                               WHEN s.total_degree IS NULL THEN FALSE
-                               ELSE THEN TRUE 
-                             END 
-                       FROM student AS s WHERE s.seat_number=1917864;""",nativeQuery = true)
-    Boolean isLastStudentDone();
-
-
-    @Query(value = """
-                      SELECT CASE
-                               WHEN COUNT(s.seat_number) = :sheetSize THEN TRUE
-                               ELSE FALSE 
-                             END 
-                       FROM student AS s ;""",nativeQuery = true)
-    Boolean areAllInserted(@Param("sheetSize")Long sheetSize);
+                      SELECT * FROM  student AS s WHERE s.seat_number BETWEEN :from_id AND :to_id ORDER BY s.seat_number ASC;""" ,nativeQuery = true)
+    public List<Student>findAllBetween(@Param("from_id")Long from, @Param("to_id")Long to);
 
 
     @Transactional
@@ -75,32 +45,18 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
     public void setRanks();
 
 
-    @Transactional
-    @Modifying
-    @Query(value = """
-            UPDATE student s
-            JOIN (
-                SELECT seat_number,
-                       DENSE_RANK() OVER (ORDER BY percentage DESC) AS rank_with_duplicates,
-                       ROW_NUMBER() OVER (ORDER BY percentage DESC, arabic_name ASC) AS  student_rank
-                FROM student
-                WHERE seat_number BETWEEN :startSeatNumber AND :endSeatNumber
-            ) r ON s.seat_number = r.seat_number
-            SET s.student_rank = r.student_rank,
-                s.rank_with_duplicates = r.rank_with_duplicates
-            WHERE s.seat_number BETWEEN :startSeatNumber AND :endSeatNumber
-        """,nativeQuery = true)
-    public void setRanksInBatch(@Param("startSeatNumber")long startSeatNumber, @Param("endSeatNumber")long endSeatNumber);
-
-
-    @Query(value = """
-                      SELECT * FROM  student AS s WHERE s.seat_number BETWEEN :from_id AND :to_id ORDER BY s.seat_number ASC;""" ,nativeQuery = true)
-    public List<Student>findAllBetween(@Param("from_id")Long from, @Param("to_id")Long to);
-
 
     @Transactional
     @Modifying
     @Query(value = "DELETE FROM student",nativeQuery = true)
     public void deleteAllStudents();
-    //public void deleteAll();
+
+
+    // Helper Queries
+    @Query(value = "SELECT student_rank FROM student AS s WHERE s.percentage = (SELECT MIN(t.percentage) FROM student AS t) LIMIT 1 ;",nativeQuery = true)
+    public Long getMinRank();
+
+
+    @Query(value = "select count(s.seat_number) from student as s;",nativeQuery = true)
+    public Long countStudent();
 }
