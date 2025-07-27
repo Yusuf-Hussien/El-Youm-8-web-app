@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import phi.elyoum8.exception.StudentNotFoundException;
 import phi.elyoum8.model.Student;
 import phi.elyoum8.repository.StudentRepository;
 
@@ -18,7 +19,9 @@ public class StudentService {
 
 
     public Student findBySeatNumber(Long seatNumber) {
-        return studentRepository.findBySeatNumber(seatNumber);
+        return studentRepository.findBySeatNumber(seatNumber)
+                .orElseThrow(() -> new StudentNotFoundException("No student with seat number " + seatNumber + " exists")
+        );
     }
 
     public List<Student> findBySeatNumberRange(Long startSeat, Long endSeat) {
