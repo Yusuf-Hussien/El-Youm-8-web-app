@@ -15,7 +15,14 @@
             <input type="text" th:field="*{text}" class="form-control" id="arabicNameInput" placeholder="أدخل الاسم" required>
             <small th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="text-danger"></small>
         </div>
+        <div class="form-check my-2">
+            <input class="form-check-input" type="checkbox" th:field="*{spellCheck}" id="spellCheckInput">
+            <label class="form-check-label" for="spellCheckInput">
+                التدقيق الإملائي
+            </label>
+        </div>
         <button type="submit" class="btn btn-primary">بحث</button>
+
     </form>
 
 
