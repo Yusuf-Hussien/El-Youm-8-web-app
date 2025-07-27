@@ -9,16 +9,16 @@
 
 <body>
 <section layout:fragment="content">
-    <h6>جميع الطلاب</h6>
+    <h6 style="text-align: center; font-weight: bold; color: #e5863d;font-size: large;">ترتيب الطلاب على مستوى الجمهورية</h6>
     <table class="table">
         <thead>
         <tr>
             <th>رقم الجلوس</th>
             <th>الاسم</th>
-            <th>مجموع الدرجات</th>
-            <th>النسبة المئوية</th>
-            <th>الترتيب</th>
-            <th>الترتيب مكرر</th>
+            <th style="text-align: center;">مجموع الدرجات</th>
+            <th style="text-align: center;">النسبة المئوية</th>
+            <th style="text-align: center;">الترتيب</th>
+            <th style="text-align: center;">الترتيب مكرر</th>
 
         </tr>
         </thead>
@@ -26,10 +26,10 @@
         <tr th:each="student : ${students}">
             <td th:text="${student.seatNumber}"></td>
             <td th:text="${student.arabicName}"></td>
-            <td th:text="${student.totalDegree}"></td>
-            <td th:text="${student.percentage} + ' %'" style="color: #0d6efd;font-weight: bold"></td>
-            <td th:text="${student.studentRank}"></td>
-            <td th:text="${student.rankWithDuplicates}"></td>
+            <td th:text="${student.totalDegree}" style="text-align: center;"></td>
+            <td th:text="${student.percentage} + ' %'" style="color: #0d6efd;font-weight: bold;text-align: center;"></td>
+            <td th:text="${student.studentRank}" style="text-align: center;"></td>
+            <td th:text="${student.rankWithDuplicates}" style="text-align: center;"></td>
 
         </tr>
         </tbody>
@@ -37,18 +37,26 @@
 
     <!-- Pagination Controls -->
     <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-        <ul class="pagination justify-content-center">
-            <li class="page-item" th:class="${currentPage == 0} ? 'disabled'">
-                <a class="page-link" th:href="@{/natega/listAll(page=${currentPage - 1})}">السابق</a>
-            </li>
-            <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
-                th:class="${i == currentPage} ? 'active'">
-                <a class="page-link" th:href="@{/natega/listAll(page=${i})}" th:text="${i + 1}"></a>
-            </li>
-            <li class="page-item" th:class="${currentPage == totalPages - 1} ? 'disabled'">
-                <a class="page-link" th:href="@{/natega/listAll(page=${currentPage + 1})}">التالي</a>
-            </li>
-        </ul>
+        <div class="d-flex justify-content-center align-items-center">
+            <a class="btn btn-link" th:class="${currentPage == 0} ? 'disabled'" th:href="@{/natega/listAll(page=${currentPage - 1})}" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+            <div class="mx-2">
+                <input type="number" id="pageInput" th:value="${currentPage + 1}" min="1" th:max="${totalPages}" style="width: 60px; text-align: center;" onkeydown="if(event.key === 'Enter') navigateToPage(this.value, ${totalPages})">
+                <span th:text="' من ' + ${totalPages}"></span>
+            </div>
+            <a class="btn btn-link" th:class="${currentPage == totalPages - 1} ? 'disabled'" th:href="@{/natega/listAll(page=${currentPage + 1})}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </div>
+        <script>
+            function navigateToPage(page, totalPages) {
+                let pageNum = parseInt(page) - 1;
+                if (isNaN(pageNum) || pageNum < 0) pageNum = 0;
+                if (pageNum >= totalPages) pageNum = totalPages - 1;
+                window.location.href = '/natega/listAll?page=' + pageNum;
+            }
+        </script>
     </nav>
 </section>
 </body>

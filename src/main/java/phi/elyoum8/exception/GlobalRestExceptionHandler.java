@@ -1,13 +1,12 @@
-package phi.elyoum8.controller;
+package phi.elyoum8.exception;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.thymeleaf.exceptions.TemplateProcessingException;
 
 import java.util.Map;
 
 @RestControllerAdvice
-public class GlobalApiExceptionHandler {
+public class GlobalRestExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public Map<?,?> handleNotFound(Exception ex)

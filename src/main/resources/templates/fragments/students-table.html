@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:if="${students}" th:fragment="studentsTableFragment(students)">
+    <h6>نتائج البحث</h6>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>رقم الجلوس</th>
+            <th>الاسم</th>
+            <th style="text-align: center;">مجموع الدرجات</th>
+            <th style="text-align: center;">النسبة المئوية</th>
+            <th style="text-align: center;">الترتيب</th>
+            <th style="text-align: center;">الترتيب مكرر</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="student : ${students}">
+            <td th:text="${student.seatNumber}"></td>
+            <td th:text="${student.arabicName}"></td>
+            <td th:text="${student.totalDegree}" style="text-align: center;"></td>
+            <td th:text="${student.percentage} + ' %'" style="color: #0d6efd;font-weight: bold;text-align: center;"></td>
+            <td th:text="${student.studentRank}" style="text-align: center;"></td>
+            <td th:text="${student.rankWithDuplicates}" style="text-align: center;"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

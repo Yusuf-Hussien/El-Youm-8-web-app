@@ -1,4 +1,4 @@
-package phi.elyoum8.controller;
+package phi.elyoum8.exception;
 
 import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.ui.Model;
@@ -8,7 +8,7 @@ import org.thymeleaf.exceptions.TemplateProcessingException;
 import phi.elyoum8.util.dataBinding.FormData;
 
 @ControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalMVCExceptionHandler {
 
     @ExceptionHandler({TemplateProcessingException.class, SpelEvaluationException.class})
     public String handleNotFound(Exception ex, Model model)

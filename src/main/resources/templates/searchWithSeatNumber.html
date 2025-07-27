@@ -4,70 +4,73 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout}">
 <head>
-  <title layout:title="Search by Seat Number">Search</title>
+    <title layout:title="Search by Seat Number">Search</title>
 </head>
 
 
 <body>
 
-  <section layout:fragment="content">
+<section layout:fragment="content">
 
-  <!-- Form -->
-  <form id="studentForm" method="post" th:action="@{/natega/searchWithSeatNumber}" th:object="${seatNumberForm}" >
-    <div class="form-group">
-      <label for="seatNumberInput">رقم الجلوس</label>
-      <input type="text" th:field="*{seatNumber}" class="form-control" id="seatNumberInput" aria-describedby="emailHelp"
-             placeholder="رقم الجلوس" required>
-    </div>
-    <button type="submit" class="btn btn-primary">بحث</button>
-  </form>
+    <!-- Form -->
+    <form id="studentForm" method="post" th:action="@{/natega/searchWithSeatNumber}" th:object="${seatNumberForm}">
+        <div class="form-group">
 
-  <!-- Student Result -->
-  <div class="RightSide" th:if="${student}">
-    <div class="halfinput-student">
-      <h6>بيانات الطالب</h6>
-    </div>
-    <div class="data-result">
-      <div class="halfinput-result">
-        <div class="wrapper">
-          <ul class="nav nav-pills mb-3 d-flex justify-content-center" id="pills-tab" role="tablist">
-            <li class="col resultItem">
-              <span class="formatt3">رقم الجلوس</span>
-              <h1 th:text="${student.seatNumber}"></h1>
-            </li>
-            <li class="col resultItem">
-              <span class="formatt3">مجموع الدرجات</span>
-              <h1 th:text="${student.totalDegree}"></h1>
-            </li>
-            <li class="col resultItem">
-              <span class="formatt3">النسبة المئوية</span>
-              <h1 th:text="${student.percentage} + ' %'"></h1>
-            </li>
-          </ul>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">بحث</button>
+                <input type="text" th:field="*{seatNumber}" class="form-control" id="seatNumberInput"
+                       aria-describedby="emailHelp"
+                       placeholder="رقم الجلوس" required>
+            </div>
         </div>
-      </div>
-    </div>
-    <div class="clear"></div>
-    <div class="full-result">
-      <ul class="nav-pills mb-3" id="pills-tab" role="tablist">
-        <li class="resultItem">
-          <span class="formatt active" id="tab-list-active">الأسم:</span>
-          <span th:text="${student.arabicName}"></span>
-        </li>
-        <li class="resultItem">
-          <span class="formatt" id="tab">الترتيب:</span>
-          <span th:text="${student.studentRank}"></span>
-        </li>
-        <li class="resultItem">
-          <span class="formatt" id="tab">الترتيب مكرر:</span>
-          <span th:text="${student.rankWithDuplicates}"></span>
-        </li>
-      </ul>
-    </div>
-  </div>
+    </form>
 
-  <!-- Error Message -->
-  <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <!-- Student Result -->
+    <div class="RightSide" th:if="${student}">
+        <div class="halfinput-student">
+            <h6>بيانات الطالب</h6>
+        </div>
+        <div class="data-result">
+            <div class="halfinput-result">
+                <div class="wrapper">
+                    <ul class="nav nav-pills mb-3 d-flex justify-content-center" id="pills-tab" role="tablist">
+                        <li class="col resultItem">
+                            <span class="formatt3">رقم الجلوس</span>
+                            <h1 th:text="${student.seatNumber}"></h1>
+                        </li>
+                        <li class="col resultItem">
+                            <span class="formatt3">مجموع الدرجات</span>
+                            <h1 th:text="${student.totalDegree}"></h1>
+                        </li>
+                        <li class="col resultItem">
+                            <span class="formatt3">النسبة المئوية</span>
+                            <h1 th:text="${student.percentage} + ' %'"></h1>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div class="full-result">
+            <ul class="nav-pills mb-3" id="pills-tab" role="tablist">
+                <li class="resultItem2">
+                    <span class="formatt active" id="tab-list-active">الأسم: </span>
+                    <span th:text="${student.arabicName}"></span>
+                </li>
+                <li class="resultItem2">
+                    <span class="formatt" id="tab">الترتيب: </span>
+                    <span th:text="${student.studentRank}"></span>
+                </li>
+                <li class="resultItem2">
+                    <span class="formatt" id="tab"> الترتيب مكرر:</span>
+                    <span th:text="${student.rankWithDuplicates}"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Error Message -->
+    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
 
 </section>
 </body>

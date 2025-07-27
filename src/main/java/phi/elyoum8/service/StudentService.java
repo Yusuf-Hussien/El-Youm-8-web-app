@@ -13,22 +13,20 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class StudentService {
-    private static final Map<Character, List<Character>> ARABIC_CHAR_VARIATIONS = new HashMap<>();
-    static {
-        ARABIC_CHAR_VARIATIONS.put('ي', Arrays.asList('ى'));
-        ARABIC_CHAR_VARIATIONS.put('ى', Arrays.asList('ي'));
-        ARABIC_CHAR_VARIATIONS.put('ة', Arrays.asList('ه'));
-        ARABIC_CHAR_VARIATIONS.put('ه', Arrays.asList('ة'));
-        ARABIC_CHAR_VARIATIONS.put('ا', Arrays.asList('أ','إ'));
-        ARABIC_CHAR_VARIATIONS.put('أ', Arrays.asList('ا'));
-        ARABIC_CHAR_VARIATIONS.put('إ', Arrays.asList('ا'));
-    }
 
     private final StudentRepository studentRepository;
 
 
     public Student findBySeatNumber(Long seatNumber) {
         return studentRepository.findBySeatNumber(seatNumber);
+    }
+
+    public List<Student> findBySeatNumberRange(Long startSeat, Long endSeat) {
+        return studentRepository.findAllBetween(Math.min(startSeat,endSeat),Math.max(startSeat,endSeat));
+    }
+
+    public Page<Student> findAll(Integer page, Integer size) {
+        return studentRepository.findAllByOrderByPercentageDescArabicNameAsc(PageRequest.of(page,size));
     }
 
     public List<Student> findByName(String name) {
@@ -41,6 +39,17 @@ public class StudentService {
         for (String variation : variations)
             results.addAll(studentRepository.findAllStudentsByNameStartsWith(variation));
         return results.stream().distinct().collect(Collectors.toList());
+    }
+
+    private static final Map<Character, List<Character>> ARABIC_CHAR_VARIATIONS = new HashMap<>();
+    static {
+        ARABIC_CHAR_VARIATIONS.put('ي', Arrays.asList('ى'));
+        ARABIC_CHAR_VARIATIONS.put('ى', Arrays.asList('ي'));
+        ARABIC_CHAR_VARIATIONS.put('ة', Arrays.asList('ه'));
+        ARABIC_CHAR_VARIATIONS.put('ه', Arrays.asList('ة'));
+        ARABIC_CHAR_VARIATIONS.put('ا', Arrays.asList('أ','إ'));
+        ARABIC_CHAR_VARIATIONS.put('أ', Arrays.asList('ا'));
+        ARABIC_CHAR_VARIATIONS.put('إ', Arrays.asList('ا'));
     }
 
     private List<String> generateNameVariations(String name)
@@ -77,11 +86,5 @@ public class StudentService {
     }
 
 
-    public List<Student> findBySeatNumberRange(Long startSeat, Long endSeat) {
-        return studentRepository.findAllBetween(Math.min(startSeat,endSeat),Math.max(startSeat,endSeat));
-    }
 
-    public Page<Student> findAll(Integer page, Integer size) {
-        return studentRepository.findAllByOrderByPercentageDescArabicNameAsc(PageRequest.of(page,size));
-    }
 }
