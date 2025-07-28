@@ -17,6 +17,8 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student,Long> {
 
+    public boolean existsBySeatNumber(long seatNumber);
+
     public Optional<Student> findBySeatNumber(long id);
 
     Page<Student> findAllByOrderByPercentageDescArabicNameAsc(Pageable pageable);

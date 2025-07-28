@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.DataAccessException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import phi.elyoum8.model.Student;
 import phi.elyoum8.repository.StudentRepository;
@@ -54,13 +57,17 @@ public class DataMigrator {
                student.setArabicName(values[1]);
                student.setTotalDegree(Double.parseDouble(values[2]));
 
-               currentBatch.add(student);
+               if (!studentRepository.existsBySeatNumber(student.getSeatNumber())) currentBatch.add(student);
+               else log.debug("Skipping duplicate student with seatNumber: {}", student.getSeatNumber());
+
+
                if(currentBatch.size()>=BATCH_SIZE)
                {
                    var tempBatch = new ArrayList<>(currentBatch);
-                   processes.add(executor.submit(()->{
+                   /*processes.add(executor.submit(()->{
                        studentRepository.saveAll(tempBatch);
-                   }));
+                   }));*/
+                   processes.add(submitBatchWithRetry(tempBatch));
                    lineCount+=currentBatch.size();
                    currentBatch.clear();
                }
@@ -68,31 +75,65 @@ public class DataMigrator {
            if(!currentBatch.isEmpty())
            {
                var tempBatch = new ArrayList<>(currentBatch);
-               processes.add(executor.submit(()->{
-                   studentRepository.saveAll(tempBatch);
-               }));
+               processes.add(submitBatchWithRetry(tempBatch));
                lineCount+=currentBatch.size();
                currentBatch.clear();
                log.info("{} Record was sent to the Database Successfully and they are being inserted right now",lineCount);
            }
 
-           for(Future<?>process : processes)  process.get();
+           for(Future<?>process : processes)
+           {
+               try {
+                   process.get();
+               }catch (InterruptedException e) {
+                   log.error("Thread interrupted during batch processing: {}", e.getMessage());
+                   Thread.currentThread().interrupt();
+                   throw new RuntimeException("Migration interrupted", e);
+               } catch (Exception e) {
+                   log.error("Error completing batch: {}", e.getMessage());
+                   throw new RuntimeException("Batch processing failed", e);
+               }
+           }
 
             long dataMigrateEndTime = System.currentTimeMillis()/1000;
             log.info("-----All Records inserted Successfully in {} seconds------",dataMigrateEndTime-dataMigrateStartTime);
 
             long rankStartTime = System.currentTimeMillis()/1000;
             log.info("Ranks are being setting right now!");
-            rankSetter.assignRanksUsingNativeQuery();
+            assignRanksWithRetry();
             long rankEndTime = System.currentTimeMillis()/1000;
             log.info("-----Ranks updated successfully in {} seconds------",rankEndTime-rankStartTime);
 
         }catch (IOException ex){
-            log.error("Error reading file --> " + fileName);
-        }catch (InterruptedException  | ExecutionException ex){
-            log.error("Error Handling The Async Process!");
+            log.error("Error reading file--> {}: {}", fileName, ex.getMessage());
+            throw new RuntimeException("Failed to read CSV file", ex);
         }
     }
 
+
+    @Retryable(value = {DataAccessException.class},maxAttempts = 5,backoff = @Backoff(delay = 7*1000, multiplier = 2))
+    private void saveBatch(List<Student> students)
+    {
+        studentRepository.saveAll(students);
+    }
+
+    @Retryable(value = {DataAccessException.class},maxAttempts = 5,backoff = @Backoff(delay = 7*1000, multiplier = 2))
+    private void assignRanksWithRetry()
+    {
+        rankSetter.assignRanksUsingNativeQuery();
+    }
+
+    private Future<?>submitBatchWithRetry(List<Student> students)
+    {
+        return executor.submit(()->{
+            try {
+                saveBatch(students);
+                log.info("Successfully saved batch of {} students", students.size());
+            }catch (Exception ex){
+                log.error("Error saving batch: {}", ex. getMessage());
+                throw ex;
+            }
+        });
+    }
 
 }
