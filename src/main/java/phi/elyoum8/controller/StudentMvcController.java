@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import phi.elyoum8.model.Student;
 import phi.elyoum8.service.StudentService;
-import phi.elyoum8.util.dataBinding.FormData;
 import phi.elyoum8.util.dataBinding.NameForm;
 import phi.elyoum8.util.dataBinding.SeatNumberForm;
 import phi.elyoum8.util.dataBinding.SeatNumbersForm;
@@ -17,7 +16,7 @@ import java.util.List;
 @Controller
 @RequestMapping("natega")
 @RequiredArgsConstructor
-public class StudentMVCController {
+public class StudentMvcController {
     private final StudentService studentService;
 
     @GetMapping({"","/","/searchWithSeatNumber"})
@@ -29,7 +28,7 @@ public class StudentMVCController {
 
     @PostMapping("/searchWithSeatNumber")
     public String searchBySeat(@ModelAttribute("seatNumberForm")SeatNumberForm seatNumberForm, Model model) {
-        Student student = studentService.findBySeatNumber(seatNumberForm.getSeatNumber());
+        Student student = studentService.findBySeatNumberForMvc(seatNumberForm.getSeatNumber());
         model.addAttribute("student", student);
         model.addAttribute("error", student == null ? "رقم الجلوس غير صحيح" : null);
         model.addAttribute("seatNumberForm", seatNumberForm);
@@ -79,7 +78,7 @@ public class StudentMVCController {
             @ModelAttribute("seatNumbers") SeatNumbersForm seatNumbers
             , Model model)
     {
-        List<Student>students = studentService.findBySeatNumberRange(
+        List<Student>students = studentService.findBySeatNumberRangeForMvc(
                 seatNumbers.getStartSeatNumber(),
                 seatNumbers.getEndSeatNumber()
         );

@@ -1,41 +1,51 @@
 package phi.elyoum8.exception;
 
-import jakarta.validation.ValidationException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import phi.elyoum8.controller.ApiResponseWrapper;
 
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class GlobalRestExceptionHandler {
 
     @ExceptionHandler(StudentNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleStudentNotFound(StudentNotFoundException ex) {
-        return new ResponseEntity<>(Map.of("message", ex.getMessage()), HttpStatus.NOT_FOUND);
+    public ResponseEntity<ApiResponseWrapper<?>> handleStudentNotFound(StudentNotFoundException ex) {
+        return new ResponseEntity<>(ApiResponseWrapper.error(ex.getMessage()), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<?,?>>handleIllegalArgument(IllegalArgumentException ex)
+    public ResponseEntity<ApiResponseWrapper<?>>handleIllegalArgument(IllegalArgumentException ex)
     {
-        return new ResponseEntity<>(Map.of("message",ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiResponseWrapper.error(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<?,?>>handleValidationException(MethodArgumentNotValidException ex)
+    public ResponseEntity<ApiResponseWrapper<?>>handleValidationException(MethodArgumentNotValidException ex)
     {
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
                 .map(error->error.getField()+": "+error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
-        return new ResponseEntity<>(Map.of("message",ex.getMessage()), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(ApiResponseWrapper.error(errorMessage), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ApiResponseWrapper<?>>handleConstraintViolation(ConstraintViolationException ex)
+    {
+        String errorMessage = ex.getConstraintViolations()
+                .stream()
+                .map(error->error.getMessage())
+                .collect(Collectors.joining(" , "));
+        return new ResponseEntity<>(ApiResponseWrapper.error(errorMessage), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<?,?>>handleGenericArgument(Exception ex)
+    public ResponseEntity<ApiResponseWrapper<?>>handleGenericArgument(Exception ex)
     {
-        return new ResponseEntity<>(Map.of("message","An Un Expected Error"), HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>(ApiResponseWrapper.error("An Un Expected Error"), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -42,18 +42,26 @@
                 <span aria-hidden="true">&laquo;</span>
             </a>
             <div class="mx-2">
-                <input type="number" id="pageInput" th:value="${currentPage + 1}" min="1" th:max="${totalPages}" style="width: 60px; text-align: center;" onkeydown="if(event.key === 'Enter') navigateToPage(this.value, ${totalPages})">
+                <input type="number" id="pageInput" th:value="${currentPage + 1}" min="1" th:max="${totalPages}" style="width: 60px; text-align: center;">
+                <button class="btn btn-primary btn-sm" onclick="navigateToPage(document.getElementById('pageInput').value, [[${totalPages}]])">Go</button>
                 <span th:text="' من ' + ${totalPages}"></span>
             </div>
             <a class="btn btn-link" th:class="${currentPage == totalPages - 1} ? 'disabled'" th:href="@{/natega/listAll(page=${currentPage + 1})}" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
         </div>
+
+        <div th:if="${totalPages != null}" th:text="'Debug: Total Pages = ' + ${totalPages}"></div>
+        <div th:if="${totalPages == null}" th:text="'Debug: Total Pages is not set'"></div>
         <script>
             function navigateToPage(page, totalPages) {
                 let pageNum = parseInt(page) - 1;
-                if (isNaN(pageNum) || pageNum < 0) pageNum = 0;
-                if (pageNum >= totalPages) pageNum = totalPages - 1;
+
+                if (isNaN(pageNum) || pageNum < 0) {
+                    pageNum = 0;
+                } else if (totalPages && pageNum >= totalPages) {
+                    pageNum = totalPages - 1;
+                }
                 window.location.href = '/natega/listAll?page=' + pageNum;
             }
         </script>

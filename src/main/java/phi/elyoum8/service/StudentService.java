@@ -24,7 +24,17 @@ public class StudentService {
         );
     }
 
+    public Student findBySeatNumberForMvc(Long seatNumber) {
+        return studentRepository.findBySeatNumber(seatNumber).orElse(null);
+    }
+
     public List<Student> findBySeatNumberRange(Long startSeat, Long endSeat) {
+        List<Student>students = studentRepository.findAllBetween(Math.min(startSeat,endSeat),Math.max(startSeat,endSeat));
+        if(students.isEmpty()) throw new StudentNotFoundException("No Students between " + startSeat + " and " + endSeat + " exists");
+        return studentRepository.findAllBetween(Math.min(startSeat,endSeat),Math.max(startSeat,endSeat));
+    }
+
+    public List<Student> findBySeatNumberRangeForMvc(Long startSeat, Long endSeat) {
         return studentRepository.findAllBetween(Math.min(startSeat,endSeat),Math.max(startSeat,endSeat));
     }
 

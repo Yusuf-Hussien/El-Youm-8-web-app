@@ -8,7 +8,7 @@ import org.thymeleaf.exceptions.TemplateProcessingException;
 import phi.elyoum8.util.dataBinding.FormData;
 
 @ControllerAdvice
-public class GlobalMVCExceptionHandler {
+public class GlobalMvcExceptionHandler {
 
     @ExceptionHandler({TemplateProcessingException.class, SpelEvaluationException.class})
     public String handleNotFound(Exception ex, Model model)

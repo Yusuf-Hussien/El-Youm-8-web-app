@@ -9,18 +9,18 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class ApiResponse <T>{
+public class ApiResponseWrapper<T>{
     private boolean success;
     private T data;
     private String message;
 
-    public static <T> ApiResponse<T>success(T data)
+    public static <T> ApiResponseWrapper<T> success(T data)
     {
-        return new ApiResponse<>(true,data,null);
+        return new ApiResponseWrapper<>(true,data,null);
     }
 
-    public static <T> ApiResponse<T>error(String message)
+    public static <T> ApiResponseWrapper<T> error(String message)
     {
-        return new ApiResponse<>(false,null,message);
+        return new ApiResponseWrapper<>(false,null,message);
     }
 }
