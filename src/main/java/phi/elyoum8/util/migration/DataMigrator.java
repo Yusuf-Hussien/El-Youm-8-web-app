@@ -16,7 +16,6 @@ import java.util.concurrent.*;
 
 @Slf4j
 @Component
-@Profile("migrate")
 @RequiredArgsConstructor
 public class DataMigrator {
 
