@@ -51,8 +51,6 @@
             </a>
         </div>
 
-        <div th:if="${totalPages != null}" th:text="'Debug: Total Pages = ' + ${totalPages}"></div>
-        <div th:if="${totalPages == null}" th:text="'Debug: Total Pages is not set'"></div>
         <script>
             function navigateToPage(page, totalPages) {
                 let pageNum = parseInt(page) - 1;
