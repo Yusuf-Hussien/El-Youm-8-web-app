@@ -1,11 +1,14 @@
 package phi.elyoum8.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import phi.elyoum8.model.Student;
+import phi.elyoum8.service.StudentRestService;
 import phi.elyoum8.service.StudentService;
 import phi.elyoum8.util.dataBinding.NameForm;
 import phi.elyoum8.util.dataBinding.SeatNumberForm;
@@ -14,10 +17,14 @@ import phi.elyoum8.util.dataBinding.SeatNumbersForm;
 import java.util.List;
 
 @Controller
-@RequestMapping("natega")
-@RequiredArgsConstructor
+@RequestMapping({"natega"})
 public class StudentMvcController {
+
     private final StudentService studentService;
+
+    public StudentMvcController(@Qualifier("studentMvcService") StudentService studentService) {
+        this.studentService = studentService;
+    }
 
     @GetMapping({"","/","/searchWithSeatNumber"})
     public String showSeatSearch(Model model) {
@@ -28,7 +35,7 @@ public class StudentMvcController {
 
     @PostMapping("/searchWithSeatNumber")
     public String searchBySeat(@ModelAttribute("seatNumberForm")SeatNumberForm seatNumberForm, Model model) {
-        Student student = studentService.findBySeatNumberForMvc(seatNumberForm.getSeatNumber());
+        Student student = studentService.findBySeatNumber(seatNumberForm.getSeatNumber());
         model.addAttribute("student", student);
         model.addAttribute("error", student == null ? "رقم الجلوس غير صحيح" : null);
         model.addAttribute("seatNumberForm", seatNumberForm);
@@ -45,9 +52,11 @@ public class StudentMvcController {
 
     @PostMapping("/searchByName")
     public String searchByName(@ModelAttribute("formData") NameForm formData, Model model) {
-        List<Student> students = formData.getSpellCheck() ?
-                 studentService.findByName(formData.getText())
-                :studentService.findByNameIgnoreSpillCheck(formData.getText());
+        List<Student> students = studentService.findByName(
+                formData.getText(),
+                formData.getSpellCheck(),
+                formData.getIsMidName()
+        );
         model.addAttribute("students", students);
         model.addAttribute("error", students == null || students.isEmpty() ? "لايوجد طالب بهذا الاسم!" : null);
         model.addAttribute("formData", formData);
@@ -78,7 +87,7 @@ public class StudentMvcController {
             @ModelAttribute("seatNumbers") SeatNumbersForm seatNumbers
             , Model model)
     {
-        List<Student>students = studentService.findBySeatNumberRangeForMvc(
+        List<Student>students = studentService.findBySeatNumberRange(
                 seatNumbers.getStartSeatNumber(),
                 seatNumbers.getEndSeatNumber()
         );

@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${fields.title}"></title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4 landscape;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans Arabic', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            direction: rtl;
+            box-sizing: border-box;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 29.7cm; /* A4 width in landscape */
+            height: auto;
+            padding: 2cm 2cm;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
+        }
+
+        .card-header {
+            text-align: center;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-header .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #1a237e;
+        }
+
+        .card-content {
+            text-align: right;
+        }
+
+        .students-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0;
+            font-size: 1em;
+            color: #333;
+        }
+
+        .students-table th,
+        .students-table td {
+            padding: 10px 12px;
+            border-bottom: 1px dashed #e0e0e0;
+        }
+
+        .students-table th {
+            font-weight: bold;
+            color: #0d6efd;
+            font-size: 1.1em;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
+
+        .students-table td {
+            font-weight: normal;
+            text-align: center;
+        }
+
+        .students-table th.arabic-name,
+        .students-table td.arabic-name {
+            text-align: right;
+        }
+
+        .students-table tr:last-child th,
+        .students-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .students-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .footer a {
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="card-header">
+        <h1 class="title" th:text="${fields.title}"></h1>
+    </div>
+    <div class="card-content">
+        <table class="students-table">
+            <thead>
+            <tr>
+                <th th:text="${fields.seatNumberField}"></th>
+                <th class="arabic-name" th:text="${fields.arabicNameField}"></th>
+                <th th:text="${fields.totalDegreeField}"></th>
+                <th th:text="${fields.percentageField}"></th>
+                <th th:text="${fields.rankField}"></th>
+                <th th:text="${fields.rankWithDuplicatesField}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student : ${students}">
+                <td th:text="${student.seatNumber}"></td>
+                <td class="arabic-name" th:text="${student.arabicName}"></td>
+                <td th:text="${student.totalDegree}"></td>
+                <td th:text="${student.percentage + '%'}"></td>
+                <td th:text="${student.studentRank}"></td>
+                <td th:text="${student.rankWithDuplicates}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer no-print">
+        <p th:text="${fields.footerMessage}"></p>
+        <p>
+            <a href="https://t.me/el_youm_8_bot" target="_blank" rel="noopener noreferrer">Telegram Bot</a>
+            |
+            <a href="https://github.com/Yusuf-Hussien/El-Youm-8" target="_blank" rel="noopener noreferrer">GitHub</a>
+            |
+            <a href="https://www.linkedin.com/in/yusuf-7ussien" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

@@ -26,6 +26,9 @@ public interface StudentRepository extends JpaRepository<Student,Long> {
     @Query(value = "SELECT * FROM student WHERE arabic_name LIKE CONCAT(:name, '%')", nativeQuery = true)
     List<Student> findAllStudentsByNameStartsWith(@Param("name") String name);
 
+    @Query(value = "SELECT * FROM student WHERE arabic_name LIKE CONCAT('%',:name, '%')", nativeQuery = true)
+    List<Student> findAllStudentsByNameContains(@Param("name") String name);
+
 
     @Query(value = """
                       SELECT * FROM  student AS s WHERE s.seat_number BETWEEN :from_id AND :to_id ORDER BY s.seat_number ASC;""" ,nativeQuery = true)

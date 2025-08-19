@@ -1,5 +1,6 @@
 package phi.elyoum8;
 
+import org.hibernate.exception.JDBCConnectionException;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,6 +12,7 @@ import phi.elyoum8.util.migration.RankSetter;
 public class ElYoum8Application {
 
     public static void main(String[] args) {
+    try{
         var context = SpringApplication.run(ElYoum8Application.class, args);
 
         var dataMigrator = context.getBean(DataMigrator.class);
@@ -31,6 +33,11 @@ public class ElYoum8Application {
 
         if (studentRepository.getMinRank() == null)
             rankSetter.assignRanksUsingNativeQuery();
+    } catch (JDBCConnectionException e) {
+        throw new RuntimeException("JDBC Connection Error, Please check your database connection and try again!");
+    } catch (Exception e) {
+        System.err.println("Failed to start application: " + e.getMessage());
+        System.exit(1);
     }
-
+}
 }

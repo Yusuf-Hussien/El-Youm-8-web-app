@@ -9,6 +9,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
+import phi.elyoum8.config.aspects.TrackExecutionTime;
 import phi.elyoum8.model.Student;
 import phi.elyoum8.repository.StudentRepository;
 import java.io.*;
@@ -32,6 +33,7 @@ public class DataMigrator {
 
 
     @Transactional
+    @TrackExecutionTime
     public void migrateFromCsvToDatabase(String fileName)
     {
         long lineCount =0;

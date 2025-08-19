@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
+import phi.elyoum8.config.aspects.TrackExecutionTime;
 import phi.elyoum8.model.Student;
 import phi.elyoum8.repository.StudentRepository;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class RankSetter {
     @Value("${sheet.size}") Long sheetSize;
 
 
+    @TrackExecutionTime
     public void assignRanksUsingNativeQuery()
     {
         studentRepository.setRanks();

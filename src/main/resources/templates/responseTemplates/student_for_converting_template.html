@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text= "${student.arabicName}"> </title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans Arabic', sans-serif;
+            margin: 0;
+            padding: 2cm;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 21cm; /* A4 width */
+            padding: 3cm 2cm;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            box-sizing: border-box;
+        }
+
+        .card-header {
+            text-align: center;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-header .title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #1a237e;
+        }
+
+        .card-content {
+            text-align: right;
+        }
+
+        .list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .list li {
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            color: #333;
+            line-height: 1.6;
+            border-bottom: 1px dashed #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        .list li:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .list li span:first-child {
+            font-weight: bold;
+        }
+
+        .list li span:not(:first-child) {
+            font-weight: bold;
+            color: #0d6efd;
+            margin-left: 10px;
+            font-size: 1.1em;
+        }
+
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #888;
+            font-style: italic;
+        }
+
+        .footer a {
+            color: #0d6efd;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="card-header">
+        <h1 class="title" th:text="${fields.title}"></h1>
+    </div>
+    <div class="card-content">
+        <ul class="list">
+            <li><span th:text="${student.seatNumber}"></span> <span th:text="${fields.seatNumberField}"></span></li>
+            <li><span th:text="${student.arabicName}"></span> <span th:text="${fields.arabicNameField}"></span></li>
+            <li><span th:text="${student.totalDegree}"></span> <span th:text="${fields.totalDegreeField}"></span></li>
+            <li><span th:text="${'%'+student.percentage }"></span> <span th:text="${fields.percentageField}"></span></li>
+            <li><span th:text="${student.studentRank}"></span> <span th:text="${fields.rankField}"></span></li>
+            <li><span th:text="${student.rankWithDuplicates}"></span> <span th:text="${fields.rankWithDuplicatesField}"></span></li>
+        </ul>
+    </div>
+    <div class="footer no-print">
+        <p th:text="${fields.footerMessage}"></p>
+        <p>
+            <a href="https://t.me/el_youm_8_bot" target="_blank" rel="noopener noreferrer">Telegram Bot</a>
+            |
+            <a href="https://github.com/Yusuf-Hussien/El-Youm-8" target="_blank" rel="noopener noreferrer">GitHub</a>
+            |
+            <a href="https://www.linkedin.com/in/yusuf-7ussien" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

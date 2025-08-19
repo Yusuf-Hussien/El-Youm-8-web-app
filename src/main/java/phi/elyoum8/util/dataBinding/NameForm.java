@@ -13,4 +13,5 @@ public class NameForm {
     private String text;
 
     Boolean spellCheck;
+    Boolean isMidName;
 }
