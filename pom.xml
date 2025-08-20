@@ -23,7 +23,7 @@
 
         <!-- Existing Spring Boot dependencies -->
 
-        <!-- that one from chat gpt   -->
+        <!-- for encoding arabic chars   -->
         <dependency>
             <groupId>com.ibm.icu</groupId>
             <artifactId>icu4j</artifactId>

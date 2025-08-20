@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="${fields.title}"></title>
+    <title>نتيجة البحث</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
     <style>
         @page {
@@ -114,18 +114,18 @@
 <body>
 <div class="card">
     <div class="card-header">
-        <h1 class="title" th:text="${fields.title}"></h1>
+        <h1 class="title">نتيجة البحث</h1>
     </div>
     <div class="card-content">
         <table class="students-table">
             <thead>
             <tr>
-                <th th:text="${fields.seatNumberField}"></th>
-                <th class="arabic-name" th:text="${fields.arabicNameField}"></th>
-                <th th:text="${fields.totalDegreeField}"></th>
-                <th th:text="${fields.percentageField}"></th>
-                <th th:text="${fields.rankField}"></th>
-                <th th:text="${fields.rankWithDuplicatesField}"></th>
+                <th>رقم الجلوس</th>
+                <th class="arabic-name">الاسم</th>
+                <th>المجموع</th>
+                <th>النسبة</th>
+                <th>الترتيب</th>
+                <th>الترتيب مكرر</th>
             </tr>
             </thead>
             <tbody>
@@ -133,7 +133,7 @@
                 <td th:text="${student.seatNumber}"></td>
                 <td class="arabic-name" th:text="${student.arabicName}"></td>
                 <td th:text="${student.totalDegree}"></td>
-                <td th:text="${student.percentage + '%'}"></td>
+                <td th:text="${'%'+student.percentage}"></td>
                 <td th:text="${student.studentRank}"></td>
                 <td th:text="${student.rankWithDuplicates}"></td>
             </tr>
@@ -141,7 +141,7 @@
         </table>
     </div>
     <div class="footer no-print">
-        <p th:text="${fields.footerMessage}"></p>
+        <p>تم إنشاء هذا المستند بواسطة اليوم الثامن</p>
         <p>
             <a href="https://t.me/el_youm_8_bot" target="_blank" rel="noopener noreferrer">Telegram Bot</a>
             |

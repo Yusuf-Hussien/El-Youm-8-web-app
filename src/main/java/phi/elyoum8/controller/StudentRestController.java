@@ -17,6 +17,7 @@ import phi.elyoum8.service.StudentService;
 import phi.elyoum8.util.generator.HtmlGenerator;
 import phi.elyoum8.util.generator.StudentPdfGenerator;
 
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -129,8 +130,13 @@ public class StudentRestController {
         String html  = htmlGenerator.generateStudentsHtml(students,true);
         byte[] data = html.getBytes(StandardCharsets.UTF_8);
 
+        String encodedFileName = URLEncoder.encode(name + ".html", StandardCharsets.UTF_8)
+                .replace("+", "%20");
+        String contentDisposition = "inline; filename*=UTF-8''" + encodedFileName;
+
+
         return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+name+ ".html")
+                .header("Content-Disposition", contentDisposition)
                 .contentType(MediaType.TEXT_HTML)
                 .body(data);
     }
