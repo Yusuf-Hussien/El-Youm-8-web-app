@@ -18,7 +18,7 @@ public class GlobalMvcExceptionHandler {
     @ExceptionHandler(NumberFormatException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST) // or HttpStatus.OK
     public String handleNumberFormating(NumberFormatException ex, Model model) {
-        model.addAttribute("error", "تنسيق الرقم غير صحيح: " + ex.getMessage());
+        model.addAttribute("error", " انت دخلت رقم جلوس اكبر من المتاحين بكتيييييييييييييير");
         return "error";
     }
 

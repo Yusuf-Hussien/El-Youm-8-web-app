@@ -26,7 +26,7 @@
     </form>
 
     <!-- Student Result -->
-    <div th:if="${student}" th:replace="~{fragments/student-view :: studentFragment(${student})}"></div>
+    <div th:if="${student}" th:replace="~{fragments/student-view :: studentFragment(${student},false)}"></div>
 
     <!-- Error Message -->
     <div th:if="${error}" class="alert alert-danger mt-2" th:text="${error}"></div>
