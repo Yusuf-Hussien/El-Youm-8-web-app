@@ -32,7 +32,7 @@ public class GlobalMvcExceptionHandler {
     @ResponseStatus(HttpStatus.OK) // show error page but not 500
     public String handleGenericError(Exception ex, Model model) {
        // if(ex.getMessage()!="No static resource favicon.ico.")System.out.println("Caught exception: " + ex.getMessage());
-        model.addAttribute("error", "حدث خطأ: " + ex.getMessage());
+        model.addAttribute("error", "حدث خطأ: اتأكد ان الرابط بتاعك يحتوي على 'natega/' وان مفيش حاجه بعدها" );
         return "error";
     }
 }

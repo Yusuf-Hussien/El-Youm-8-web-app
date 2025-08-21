@@ -1,39 +1,39 @@
 package phi.elyoum8.repository;
 
 import jakarta.transaction.Transactional;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.NoRepositoryBean;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import phi.elyoum8.model.Student;
 
 import java.util.List;
 import java.util.Optional;
 
-@NoRepositoryBean
-public interface StudentRepository extends JpaRepository<Student, Long> {
+@Repository
+@Profile("mysql")
+public interface StudentMysqlRepository extends StudentRepository {
 
-    boolean existsBySeatNumber(long seatNumber);
-
-    Optional<Student> findBySeatNumber(long id);
-
-    Page<Student> findAllByOrderByPercentageDescArabicNameAsc(Pageable pageable);
-
+    @Override
     @Query(value = "SELECT * FROM student WHERE arabic_name LIKE CONCAT(:name, '%')", nativeQuery = true)
     List<Student> findAllStudentsByNameStartsWith(@Param("name") String name);
 
+    @Override
     @Query(value = "SELECT * FROM student WHERE arabic_name LIKE CONCAT('%',:name, '%')", nativeQuery = true)
     List<Student> findAllStudentsByNameContains(@Param("name") String name);
 
 
+    @Override
     @Query(value = """
                       SELECT * FROM  student AS s WHERE s.seat_number BETWEEN :from_id AND :to_id ORDER BY s.seat_number ASC;""" ,nativeQuery = true)
     List<Student>findAllBetween(@Param("from_id")Long from, @Param("to_id")Long to);
 
 
+    @Override
     @Transactional
     @Modifying
     @Query(value = """
@@ -51,6 +51,7 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
 
 
+    @Override
     @Transactional
     @Modifying
     @Query(value = "DELETE FROM student",nativeQuery = true)
@@ -58,10 +59,12 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
 
     // Helper Queries
+    @Override
     @Query(value = "SELECT student_rank FROM student AS s WHERE s.percentage = (SELECT MIN(t.percentage) FROM student AS t) LIMIT 1 ;",nativeQuery = true)
     Long getMinRank();
 
 
+    @Override
     @Query(value = "select count(s.seat_number) from student as s;",nativeQuery = true)
     Long countStudent();
 }

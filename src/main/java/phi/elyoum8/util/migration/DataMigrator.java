@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Profile;
 import org.springframework.dao.DataAccessException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Component;
 import phi.elyoum8.config.aspects.TrackExecutionTime;
 import phi.elyoum8.model.Student;
 import phi.elyoum8.repository.StudentRepository;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -72,6 +72,7 @@ public class DataMigrator {
                    processes.add(submitBatchWithRetry(tempBatch));
                    lineCount+=currentBatch.size();
                    currentBatch.clear();
+                   log.info("saved totally {} students into database", lineCount);
                }
            }
            if(!currentBatch.isEmpty())
@@ -130,7 +131,7 @@ public class DataMigrator {
         return executor.submit(()->{
             try {
                 saveBatch(students);
-                log.info("Successfully saved batch of {} students", students.size());
+                //log.info("Successfully saved batch of {} students", students.size());
             }catch (Exception ex){
                 log.error("Error saving batch: {}", ex. getMessage());
                 throw ex;

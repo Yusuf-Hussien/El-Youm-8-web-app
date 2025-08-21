@@ -38,7 +38,9 @@ public class Student {
     public void setTotalDegree(double totalDegree)
     {
         this.totalDegree = totalDegree;
-        this.percentage = (totalDegree/(totalDegree>=320?410:320))*100;
+        this.percentage = Math.round(
+                (totalDegree / (totalDegree >= 320 ? 410.0 : 320.0)) * 100 * 100.0
+        ) / 100.0;
         this.percentage = Math.round(percentage*1000.0)/1000.0;
     }
 }

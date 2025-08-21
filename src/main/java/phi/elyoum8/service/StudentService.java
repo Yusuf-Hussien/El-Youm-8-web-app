@@ -11,11 +11,13 @@ import phi.elyoum8.util.validation.CustomValidator;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 public abstract class StudentService {
 
     private final StudentRepository studentRepository;
 
+    public StudentService(StudentRepository studentRepository) {
+        this.studentRepository = studentRepository;
+    }
 
     public abstract Student findBySeatNumber(Long seatNumber) ;
 
