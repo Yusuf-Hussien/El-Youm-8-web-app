@@ -26,51 +26,10 @@
     </form>
 
     <!-- Student Result -->
-    <div class="RightSide" th:if="${student}">
-        <div class="halfinput-student">
-            <h6>بيانات الطالب</h6>
-        </div>
-        <div class="data-result">
-            <div class="halfinput-result">
-                <div class="wrapper">
-                    <ul class="nav nav-pills mb-3 d-flex justify-content-center" id="pills-tab" role="tablist">
-                        <li class="col resultItem">
-                            <span class="formatt3">رقم الجلوس</span>
-                            <h1 th:text="${student.seatNumber}"></h1>
-                        </li>
-                        <li class="col resultItem">
-                            <span class="formatt3">مجموع الدرجات</span>
-                            <h1 th:text="${student.totalDegree}"></h1>
-                        </li>
-                        <li class="col resultItem">
-                            <span class="formatt3">النسبة المئوية</span>
-                            <h1 th:text="${student.percentage} + ' %'"></h1>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="clear"></div>
-        <div class="full-result">
-            <ul class="nav-pills mb-3" id="pills-tab" role="tablist">
-                <li class="resultItem2">
-                    <span class="formatt active" id="tab-list-active">الأسم: </span>
-                    <span th:text="${student.arabicName}"></span>
-                </li>
-                <li class="resultItem2">
-                    <span class="formatt" id="tab">الترتيب: </span>
-                    <span th:text="${student.studentRank}"></span>
-                </li>
-                <li class="resultItem2">
-                    <span class="formatt" id="tab"> الترتيب مكرر:</span>
-                    <span th:text="${student.rankWithDuplicates}"></span>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <div th:if="${student}" th:replace="~{fragments/student-view :: studentFragment(${student})}"></div>
 
     <!-- Error Message -->
-    <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+    <div th:if="${error}" class="alert alert-danger mt-2" th:text="${error}"></div>
 
 </section>
 </body>

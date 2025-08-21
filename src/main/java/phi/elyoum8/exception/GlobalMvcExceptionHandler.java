@@ -1,20 +1,38 @@
 package phi.elyoum8.exception;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.expression.spel.SpelEvaluationException;
+import org.springframework.expression.spel.SpelParseException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.thymeleaf.exceptions.TemplateProcessingException;
-import phi.elyoum8.util.dataBinding.FormData;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class GlobalMvcExceptionHandler {
 
-    @ExceptionHandler({TemplateProcessingException.class, SpelEvaluationException.class})
-    public String handleNotFound(Exception ex, Model model)
-    {
-        model.addAttribute("errorMessage","no student with this seat number exists");
-        model.addAttribute("formData",new FormData());
-        return "home-view";
+    @ExceptionHandler(NumberFormatException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST) // or HttpStatus.OK
+    public String handleNumberFormating(NumberFormatException ex, Model model) {
+        model.addAttribute("error", "تنسيق الرقم غير صحيح: " + ex.getMessage());
+        return "error";
+    }
+
+    @ExceptionHandler({
+            TemplateProcessingException.class,
+            SpelEvaluationException.class,
+            SpelParseException.class,
+            Exception.class,
+            RuntimeException.class
+    })
+    @ResponseStatus(HttpStatus.OK) // show error page but not 500
+    public String handleGenericError(Exception ex, Model model) {
+       // if(ex.getMessage()!="No static resource favicon.ico.")System.out.println("Caught exception: " + ex.getMessage());
+        model.addAttribute("error", "حدث خطأ: " + ex.getMessage());
+        return "error";
     }
 }

@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:if="${students}" th:fragment="studentsTableFragment(students)">
-    <h6>نتائج البحث</h6>
+<div th:if="${students}" th:fragment="studentsTableFragment(students,searching)">
+    <h6 th:if="${searching}" style="margin-top: 20px; text-align: center;">نتائج البحث</h6>
+    <div style="margin-bottom: 30px;">
     <table class="table">
         <thead>
         <tr>
+            <th>#</th>
             <th>رقم الجلوس</th>
             <th>الاسم</th>
             <th style="text-align: center;">مجموع الدرجات</th>
@@ -15,7 +17,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="student : ${students}">
+        <tr th:each="student , stat : ${students}">
+            <td th:text="${stat.count}"></td>
             <td th:text="${student.seatNumber}"></td>
             <td th:text="${student.arabicName}"></td>
             <td th:text="${student.totalDegree}" style="text-align: center;"></td>
@@ -25,6 +28,9 @@
         </tr>
         </tbody>
     </table>
+
+    </div>
+    <div th:if="${searching}" style="margin-bottom: 20px;">.</div>
 </div>
 </body>
 </html>

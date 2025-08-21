@@ -9,13 +9,11 @@
 <body>
 <section layout:fragment="content">
 
-    <form id="studentForm" method="post" th:action="@{/natega/searchByName}" th:object="${formData}">
+    <form id="studentForm" method="post" th:action="@{/natega/searchByName}" th:object="${nameForm}">
         <div class="form-group">
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary">بحث</button>
-                <input type="text" th:field="*{text}" class="form-control" id="arabicNameInput" placeholder="الاسم"
-                       required>
-                <small th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="text-danger"></small>
+                <input type="text" th:field="*{text}" class="form-control" id="arabicNameInput" placeholder="الاسم" required>
             </div>
         </div>
         <div class="form-check my-2">
@@ -33,7 +31,11 @@
 
     </form>
 
-    <div th:if="${students}" th:replace="fragments/students-table :: studentsTableFragment(${students})"></div>
+
+    <div th:if="${students}" th:replace="~{fragments/students-table :: studentsTableFragment(${students},true)}"></div>
+
+    <div th:if="${error}" class="alert alert-danger mt-2" th:text="${error}"></div>
+
 
 </section>
 </body>
