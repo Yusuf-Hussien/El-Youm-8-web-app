@@ -192,14 +192,14 @@ public class StudentMvcController {
         Long startSeatNumber = Long.parseLong(seatNumbers.getStartSeatNumber());
         Long endSeatNumber = Long.parseLong(seatNumbers.getEndSeatNumber());
 
-        if (startSeatNumber-endSeatNumber+1 > 1000) {
-            model.addAttribute("error", " البحث أرجع أكثر من 1000 طالب، يرجى تضييق نطاق البحث.");
+        if (endSeatNumber-startSeatNumber+1 > 1000) {
+            model.addAttribute("errors", " البحث رجع اكتر من 1000 طالب، ضيق نطاق البحث.");
             return "searchByRange";
         }
 
         List<Student>students = studentService.findBySeatNumberRange(startSeatNumber, endSeatNumber);
         model.addAttribute("students", students);
-        model.addAttribute("error",students ==null || students.isEmpty() ? "لا يوجد طلاب بهذه الأرقام":null );
+        model.addAttribute("errors",students ==null || students.isEmpty() ? "لا يوجد طلاب بهذه الأرقام":null );
         model.addAttribute("seatNumbers", seatNumbers);
         return "searchByRange";
     }
