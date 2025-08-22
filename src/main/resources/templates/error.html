@@ -1,13 +1,67 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
->
+<html lang="ar" dir="rtl" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خطأ - اليوم الثامن</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Tajawal', sans-serif; /* Arabic-friendly font */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .error-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            text-align: center;
+        }
+        .error-icon {
+            font-size: 4rem;
+            color: #dc3545; /* Bootstrap danger color */
+        }
+        .error-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        .error-message {
+            font-size: 1.1rem;
+            color: #333;
+            margin-bottom: 2rem;
+        }
+        .btn-home {
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+        footer {
+            margin-top: auto;
+            padding: 20px;
+            background-color: #343a40;
+            color: #fff;
+            text-align: center;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-<div th:if="${error}" class="alert alert-danger" th:text="${error}" style="text-align: center;"></div>
+<div class="error-container">
+    <div class="error-icon">⚠</div>
+    <h1 class="error-title">حدث خطأ</h1>
+    <div class="error-message" th:text="${error != null} ? ${error} : 'حدث خطأ غير متوقع. الرجاء المحاولة مرة أخرى لاحقًا.'">
+        حدث خطأ غير متوقع
+    </div>
+    <a href="/natega" class="btn btn-primary btn-home">العودة إلى الصفحة الرئيسية</a>
+</div>
+<footer>
+    <p>اليوم الثامن &copy;</p>
+    <p>للدعم: <a href="mailto:yhussien01@gmail.com" class="text-light support-link">yhussien01@gmail.com</a></p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

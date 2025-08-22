@@ -4,15 +4,16 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.expression.spel.SpelEvaluationException;
 import org.springframework.expression.spel.SpelParseException;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.thymeleaf.exceptions.TemplateProcessingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ControllerAdvice
-@Order(Ordered.HIGHEST_PRECEDENCE)
+@ControllerAdvice(annotations = Controller.class)
 public class GlobalMvcExceptionHandler {
 
     @ExceptionHandler(NumberFormatException.class)
@@ -22,17 +23,36 @@ public class GlobalMvcExceptionHandler {
         return "error";
     }
 
+
+
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public String handleNotFound(NoHandlerFoundException ex, Model model) {
+        model.addAttribute("error", "الصفحة المطلوبة '" + ex.getRequestURL() + "' غير موجودة.");
+        model.addAttribute("errorCode", "ERR404");
+        return "error";
+    }
+
     @ExceptionHandler({
             TemplateProcessingException.class,
             SpelEvaluationException.class,
-            SpelParseException.class,
+            SpelParseException.class
+    })
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String handleTemplateErrors(Exception ex, Model model) {
+        model.addAttribute("error", "حدث خطأ في معالجة الصفحة. الرجاء التحقق من الرابط.");
+        model.addAttribute("errorCode", "ERR500");
+        return "error";
+    }
+
+    @ExceptionHandler({
             Exception.class,
             RuntimeException.class
-    })
-    @ResponseStatus(HttpStatus.OK) // show error page but not 500
+    })    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleGenericError(Exception ex, Model model) {
-       // if(ex.getMessage()!="No static resource favicon.ico.")System.out.println("Caught exception: " + ex.getMessage());
-        model.addAttribute("error", "حدث خطأ: اتأكد ان الرابط بتاعك يحتوي على 'natega/' وان مفيش حاجه بعدها" );
+        model.addAttribute("error", "حدث خطأ غير متوقع. الرجاء التأكد من صحة الرابط أو المحاولة لاحقًا.");
+        model.addAttribute("errorCode", "ERR500");
         return "error";
     }
 }
