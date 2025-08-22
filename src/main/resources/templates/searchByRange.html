@@ -6,32 +6,23 @@
 <head>
     <title layout:title="Search by Seat Range">Search</title>
 </head>
-
 <body>
 <section layout:fragment="content">
     <form method="post" th:action="@{/natega/searchByRange}" th:object="${seatNumbers}">
         <div class="form-group">
-            <div class="d-flex gap-2">
-
+            <div class="d-flex gap-2 range-search-form">
                 <input type="text" th:field="*{startSeatNumber}" name="startSeat" class="form-control" id="startSeat"
                        placeholder="رقم الجلوس الأول" required style="text-align: center">
-
-                <button type="submit" class="btn btn-primary">بحث</button>
-
+                <button type="submit" class="btn btn-primary range-search-btn">بحث</button>
                 <input type="text" th:field="*{endSeatNumber}" name="endSeat" class="form-control" id="endSeat"
                        placeholder="رقم الجلوس الأخير" required style="text-align: center">
-
             </div>
         </div>
     </form>
-
     <div th:if="${students}" th:replace="~{fragments/students-table :: studentsTableFragment(${students},true)}"></div>
-
     <div th:if="${errors}" class="mt-2">
-            <div th:each="error : ${errors}" th:text="${error}" class="alert alert-danger text-center"></div>
+        <div th:each="error : ${errors}" th:text="${error}" class="alert alert-danger text-center"></div>
     </div>
-
-
 </section>
 </body>
 </html>

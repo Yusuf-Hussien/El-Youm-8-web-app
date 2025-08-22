@@ -6,27 +6,20 @@
 <head>
     <title layout:title="List All Students">Search</title>
 </head>
-
 <body>
 <section layout:fragment="content">
-
     <h6 style="text-align: center; font-weight: bold; color: #e5863d;font-size: large; margin-bottom: 20px">ترتيب الطلاب على مستوى الجمهورية</h6>
-
     <div th:if="${students}" th:replace="~{fragments/students-table :: studentsTableFragment(${students}, false)}"></div>
-
-
     <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
-
 
     <!-- Pagination Controls -->
     <nav aria-label="Page navigation" th:if="${totalPages > 1}">
-        <div class="d-flex justify-content-center align-items-center">
-
+        <div class="d-flex justify-content-center align-items-center pagination-container">
             <!-- Previous -->
             <form th:action="@{/natega/listAll}" method="post" class="d-inline">
                 <input type="hidden" name="currentPage" th:value="${currentPage - 1}"/>
                 <button type="submit"
-                        class="btn btn-link p-0"
+                        class="btn btn-link p-0 pagination-btn"
                         aria-label="Previous"
                         th:disabled="${currentPage == 1}">
                     <span aria-hidden="true">&laquo;</span>
@@ -34,32 +27,30 @@
             </form>
 
             <!-- Jump to page form -->
-            <form th:action="@{/natega/listAll}" method="post" class="mx-2 d-flex flex-column align-items-center">
-                <div class="mx-2 d-flex flex-row" style="margin-top: 50px;">
-                <input type="number"
-                       name="currentPage"
-                       th:value="${currentPage}"
-                       style="width: 60px; text-align: center; margin-bottom: 5px;"
-                       class="form-control form-control-sm"/>
-                <span th:text=" ': ' + ${totalPages}" style="margin-top: 2px;margin-right: 5px;"></span>
+            <form th:action="@{/natega/listAll}" method="post" class="mx-2 d-flex flex-column align-items-center pagination-form">
+                <div class="mx-2 d-flex flex-row pagination-input-container" style="margin-top: 50px;">
+                    <input type="number"
+                           name="currentPage"
+                           th:value="${currentPage}"
+                           style="width: 60px; text-align: center; margin-bottom: 5px;"
+                           class="form-control form-control-sm pagination-input"/>
+                    <span th:text=" ': ' + ${totalPages}" style="margin-top: 2px;margin-right: 5px;" class="pagination-total"></span>
                 </div>
-                <button type="submit" class="mb-1 btn btn-primary btn-sm">Go</button>
+                <button type="submit" class="mb-1 btn btn-primary btn-sm pagination-go-btn">Go</button>
             </form>
 
             <!-- Next -->
             <form th:action="@{/natega/listAll}" method="post" class="d-inline">
                 <input type="hidden" name="currentPage" th:value="${currentPage + 1}"/>
                 <button type="submit"
-                        class="btn btn-link p-0"
+                        class="btn btn-link p-0 pagination-btn"
                         aria-label="Next"
                         th:disabled="${currentPage == totalPages}">
                     <span aria-hidden="true">&raquo;</span>
                 </button>
             </form>
-
         </div>
     </nav>
-
 </section>
 </body>
 </html>

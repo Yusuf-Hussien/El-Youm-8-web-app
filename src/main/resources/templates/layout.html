@@ -2,22 +2,28 @@
 <html lang="en"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title layout:title-pattern="$LAYOUT_TITLE - El-Youm 8">Student Search</title>
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link rel="stylesheet" th:href="@{/css/style.css}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
-
-
 <body>
+<!-- Mobile Header (only visible on mobile) -->
+<nav class="navbar navbar-light bg-light fixed-top d-lg-none mobile-header">
+    <div class="container-fluid">
+        <span class="navbar-brand fs-5 fw-bold text-primary">اليوم الثامن</span>
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
 
-<!-- Sidebar -->
-<div class="d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary"
+<!-- Desktop Sidebar (unchanged from original) -->
+<div class="d-none d-lg-flex flex-column flex-shrink-0 p-3 bg-body-tertiary desktop-sidebar"
      style="width: 280px; height: 100vh; position: fixed; right: 0; top: 0;">
     <svg class="bi pe-none me-2" width="40" height="32" aria-hidden="true">
         <use xlink:href="#bootstrap"></use>
@@ -55,46 +61,118 @@
         </li>
     </ul>
     <hr>
-
     <!-- Bottom Section -->
-    <div class="mt-auto d-flex flex-column align-items-center">
-
-        <a href="https://github.com/Yusuf-Hussien/El-Youm-8" target="_blank"
-           class="text-decoration-none text-dark d-flex align-items-center">
-            <i class="bi bi-github me-1" style="font-size: 1.5rem;"></i>
-            <span>Repository</span>
-        </a>
-
-        <a href="https://t.me/el_youm_8_bot" target="_blank"
-           class="text-decoration-none text-dark d-flex align-items-center">
-            <i class="bi bi-telegram me-1" style="font-size: 1.5rem;"></i>
-            <span>Telegram Bot</span>
-        </a>
-
-        <a href="https://linkedin.com/in/yusuf-7ussien" target="_blank">
-            <img alt="Yusuf Hussien" src="/images/MY_LOGO.png" width="145" class="mb-2">
-        </a>
-
+    <div class="mt-auto">
+        <div class="d-flex justify-content-around mb-3">
+            <a href="https://github.com/Yusuf-Hussien/El-Youm-8" target="_blank"
+               class="text-decoration-none text-primary">
+                <i class="bi bi-github" style="font-size: 1.5rem;"></i>
+            </a>
+            <a href="https://linkedin.com/in/yusuf-7ussien" target="_blank"
+               class="text-decoration-none text-primary">
+                <i class="bi bi-linkedin" style="font-size: 1.5rem;"></i>
+            </a>
+            <a href="https://t.me/el_youm_8_bot" target="_blank"
+               class="text-decoration-none text-primary">
+                <i class="bi bi-telegram" style="font-size: 1.5rem;"></i>
+            </a>
+        </div>
+        <div class="text-center">
+            <img alt="Yusuf Hussien" src="/images/MY_LOGO.png" width="150">
+        </div>
     </div>
 </div>
 
-<!-- Content Placeholder -->
+<!-- Mobile Offcanvas Sidebar -->
+<div class="offcanvas offcanvas-end d-lg-none" tabindex="-1" id="mobileSidebar">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold text-primary">اليوم الثامن</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item mb-3">
+                <a th:href="@{/natega}" th:classappend="${activePage == 'seat'} ? 'nav-link active' : 'nav-link'"
+                   data-bs-dismiss="offcanvas">
+                    <i class="bi bi-search me-2"></i>
+                    البحث برقم الجلوس
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a th:href="@{/natega/searchByName}"
+                   th:classappend="${activePage == 'name'} ? 'nav-link active' : 'nav-link'"
+                   data-bs-dismiss="offcanvas">
+                    <i class="bi bi-fonts me-2"></i>
+                    البحث بالاسم
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a th:href="@{/natega/listAll}"
+                   th:classappend="${activePage == 'all'} ? 'nav-link active' : 'nav-link'"
+                   data-bs-dismiss="offcanvas">
+                    <i class="bi bi-bar-chart me-2"></i>
+                    الترتيب
+                </a>
+            </li>
+            <li class="nav-item mb-3">
+                <a th:href="@{/natega/searchByRange}"
+                   th:classappend="${activePage == 'range'} ? 'nav-link active' : 'nav-link'"
+                   data-bs-dismiss="offcanvas">
+                    <i class="bi bi-sliders me-2"></i>
+                    بحث بين رقمين جلوس
+                </a>
+            </li>
+        </ul>
+        <hr>
+        <!-- Mobile Bottom Section -->
+        <div class="mt-auto">
+            <div class="d-flex justify-content-around mb-3">
+                <a href="https://github.com/Yusuf-Hussien/El-Youm-8" target="_blank"
+                   class="text-decoration-none text-primary">
+                    <i class="bi bi-github" style="font-size: 1.5rem;"></i>
+                </a>
+                <a href="https://linkedin.com/in/yusuf-7ussien" target="_blank"
+                   class="text-decoration-none text-primary">
+                    <i class="bi bi-linkedin" style="font-size: 1.5rem;"></i>
+                </a>
+                <a href="https://t.me/el_youm_8_bot" target="_blank"
+                   class="text-decoration-none text-primary">
+                    <i class="bi bi-telegram" style="font-size: 1.5rem;"></i>
+                </a>
+            </div>
+            <div class="text-center">
+                <img alt="Yusuf Hussien" src="/images/MY_LOGO.png" width="150">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content Placeholder (unchanged positioning for desktop) -->
 <div class="container" style="margin-right: 300px;">
     <section layout:fragment="content">
         <p>Empty content</p>
     </section>
 </div>
 
-<!-- JavaScript for Sidebar Navigation -->
+
 <script>
-    document.querySelectorAll('.nav-pills .nav-link').forEach(link => {
-        link.addEventListener('click', function () {
-            document.querySelectorAll('.nav-pills .nav-link').forEach(item => item.classList.remove('active'));
-            this.classList.add('active');
+    document.addEventListener("DOMContentLoaded", function () {
+        const sidebar = document.getElementById("mobileSidebar");
+
+        sidebar.querySelectorAll(".nav-link[data-bs-dismiss='offcanvas']").forEach(link => {
+            link.addEventListener("click", function (e) {
+                e.preventDefault(); // stop immediate navigation
+                const href = this.getAttribute("href");
+
+                // after the sidebar closes, navigate
+                sidebar.addEventListener("hidden.bs.offcanvas", function handler() {
+                    window.location.href = href;
+                    sidebar.removeEventListener("hidden.bs.offcanvas", handler);
+                });
+            });
         });
     });
 </script>
+
 </body>
 </html>
-
-

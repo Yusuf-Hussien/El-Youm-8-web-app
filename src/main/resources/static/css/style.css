@@ -1,3 +1,4 @@
+/* Original Desktop Styles (Preserved) */
 html, body {
     height: 100%;
     margin: 0;
@@ -114,3 +115,435 @@ body {
 .pagination {
     margin-top: 20px;
 }
+
+/* Mobile-Only Styles (Added without affecting desktop) */
+.mobile-header {
+    display: none;
+}
+
+/* Mobile Responsive Breakpoint */
+@media (max-width: 991.98px) {
+    /* Reset body flex for mobile */
+    body {
+        display: block;
+        flex-direction: unset;
+    }
+
+    /* Show mobile header */
+    .mobile-header {
+        display: flex !important;
+        z-index: 1030;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Adjust container for mobile */
+    .container {
+        margin: 0;
+        margin-top: 70px; /* Account for mobile header */
+        margin-right: 0 !important;
+        padding: 15px;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Mobile form adjustments */
+    .d-flex.gap-2 {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    .form-control {
+        width: 100% !important;
+        font-size: 16px; /* Prevents zoom on iOS */
+        padding: 12px;
+    }
+
+    .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .input-field {
+        width: 100% !important;
+        margin-right: 0;
+        padding: 12px;
+    }
+
+    /* Mobile result adjustments */
+    .RightSide {
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+
+    .wrapper {
+        padding: 1rem;
+    }
+
+    .resultItem h1 {
+        font-size: 1.8rem;
+    }
+
+    .halfinput-student h6 {
+        font-size: 1.3rem;
+    }
+
+    .full-result {
+        padding: 1rem;
+    }
+
+    .full-result .resultItem2,
+    .full-result .formatt,
+    .resultItem2 span:not(.formatt) {
+        font-size: 1.2rem;
+    }
+
+    /* Mobile table responsiveness */
+    .table-responsive {
+        font-size: 14px;
+    }
+
+    .table th,
+    .table td {
+        padding: 8px 4px;
+        font-size: 13px;
+    }
+
+    /* Hide some table columns on very small screens */
+    .table th:nth-child(7), /* الترتيب مكرر */
+    .table td:nth-child(7) {
+        display: none;
+    }
+
+    /* Mobile pagination adjustments */
+
+
+    /* Range search mobile adjustments */
+    .range-search-form {
+        flex-direction: column !important;
+        align-items: stretch;
+    }
+
+    .range-search-btn {
+        order: 3;
+        margin-top: 10px;
+    }
+
+    /* Offcanvas adjustments */
+    .offcanvas-end {
+        width: 280px;
+    }
+
+    .offcanvas-header {
+        border-bottom: 1px solid #dee2e6;
+        background-color: #f8f9fa;
+    }
+
+    .offcanvas-body {
+        padding: 1.5rem;
+    }
+}
+
+/* Extra small mobile devices */
+@media (max-width: 575.98px) {
+    .container {
+        padding: 10px;
+    }
+
+    .RightSide {
+        padding: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .wrapper {
+        padding: 0.75rem;
+    }
+
+    .resultItem h1 {
+        font-size: 1.6rem;
+    }
+
+    .halfinput-student h6 {
+        font-size: 1.2rem;
+    }
+
+    .full-result {
+        padding: 0.75rem;
+    }
+
+    .full-result .resultItem2,
+    .full-result .formatt,
+    .resultItem2 span:not(.formatt) {
+        font-size: 1.1rem;
+    }
+
+    /* Further reduce table on very small screens */
+    .table th,
+    .table td {
+        padding: 6px 2px;
+        font-size: 12px;
+    }
+
+    /* Hide additional columns */
+    .table th:nth-child(1), /* # */
+    .table td:nth-child(1),
+    .table th:nth-child(6), /* الترتيب */
+    .table td:nth-child(6) {
+        display: none;
+    }
+
+    /* Stack pagination elements */
+    .pagination .d-flex {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .offcanvas-end {
+        width: 100%;
+    }
+}
+
+/* Utility classes for better mobile experience */
+@media (max-width: 991.98px) {
+    .btn-sm {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .alert {
+        margin-top: 15px;
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    /* Better touch targets */
+    .nav-link {
+        padding: 12px 16px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Mobile-friendly form styling */
+    .form-check {
+        padding: 0px 0;
+        margin-right: 30px;
+    }
+
+    .form-check-input {
+        transform: scale(1.2);
+        margin-left: 8px;
+    }
+
+    .form-check-label {
+        font-size: 16px;
+        padding-right: 8px;
+        margin-right: 10px;
+    }
+}
+
+/* Print styles (bonus) */
+@media print {
+    .mobile-header,
+    .desktop-sidebar,
+    .offcanvas,
+    .btn,
+    .pagination {
+        display: none !important;
+    }
+
+    .container {
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+    }
+
+    .RightSide,
+    .wrapper,
+    .full-result {
+        box-shadow: none !important;
+        background-color: white !important;
+    }
+}
+
+
+@media (max-width: 991.98px) {
+    #studentForm .d-flex.gap-2 {
+        flex-direction: column !important;
+        align-items: stretch;
+    }
+
+    /* Input first */
+    #studentForm .form-control {
+        order: 1;
+        width: 100%;
+    }
+
+    /* Button second */
+    #studentForm .btn {
+        order: 2;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    /* Checkboxes last (only if exist) */
+    #studentForm .form-check {
+        order: 3;
+        margin-top: 10px;
+    }
+}
+
+
+
+
+
+@media (max-width: 991.98px) {
+    .pagination-container {
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 10px !important;
+    }
+
+    /* TotalPages : CurrentPage on top */
+    .pagination-input-container {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 5px;
+        margin: 0 !important;
+    }
+
+    .pagination-input {
+        width: 50px !important;
+        text-align: center;
+    }
+
+    .pagination-total {
+        font-weight: bold;
+        white-space: nowrap;
+    }
+
+    /* Buttons row */
+    .pagination-form {
+        flex-direction: row !important;
+        justify-content: center !important;
+        align-items: center !important;
+        gap: 8px;
+        margin: 0 !important;
+    }
+
+    /* Force order: Next → Go → Prev */
+    .pagination-btn[aria-label="Next"] {
+        order: 1;
+    }
+    .pagination-go-btn {
+        order: 2;
+    }
+    .pagination-btn[aria-label="Previous"] {
+        order: 3;
+    }
+
+    .pagination-btn,
+    .pagination-go-btn {
+        font-size: 1rem;
+        padding: 6px 12px;
+        min-width: 44px;
+        min-height: 36px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Tablet & Mobile */
+@media (max-width: 991.98px) {
+    /* Buttons stack full-width */
+    .student-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .student-actions .btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    /* Result wrapper adjustments */
+    .halfinput-student h6 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+    }
+
+    .resultItem h1 {
+        font-size: 1.6rem;
+    }
+
+    .resultItem span.formatt3 {
+        font-size: 0.95rem;
+    }
+
+    .RightSide {
+        padding: 1rem;
+        margin-top: 1rem;
+    }
+
+    .wrapper {
+        padding: 1rem;
+    }
+
+    .full-result {
+        padding: 1rem;
+    }
+
+    .full-result .resultItem2,
+    .full-result .formatt,
+    .resultItem2 span:not(.formatt) {
+        font-size: 1.1rem;
+    }
+}
+
+/* Extra small devices */
+@media (max-width: 575.98px) {
+    .halfinput-student h6 {
+        font-size: 1.1rem;
+    }
+
+    .resultItem h1 {
+        font-size: 1.4rem;
+    }
+
+    .RightSide {
+        padding: 0.75rem;
+    }
+
+    .wrapper {
+        padding: 0.75rem;
+    }
+
+    .full-result {
+        padding: 0.75rem;
+    }
+
+    .full-result .resultItem2,
+    .full-result .formatt,
+    .resultItem2 span:not(.formatt) {
+        font-size: 1rem;
+    }
+}
+
+

@@ -10,7 +10,8 @@
         </button>
     </div>
 
-    <div style="margin-bottom: 30px;">
+    <!-- Desktop Table (preserved original) -->
+    <div class="d-none d-md-block" style="margin-bottom: 30px;">
         <table class="table">
             <thead>
             <tr>
@@ -50,25 +51,72 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Mobile Cards (new addition) -->
+    <div class="d-md-none mobile-cards-container">
+        <div th:each="student, stat : ${students}" class="card mb-3 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h6 class="card-title text-primary mb-0" th:text="${student.arabicName}">اسم الطالب</h6>
+                    <small class="text-muted" th:text="'#' + ${stat.count}">#1</small>
+                </div>
+
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <small class="text-muted">رقم الجلوس:</small>
+                        <div class="fw-bold" th:text="${student.seatNumber}">123456</div>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">المجموع:</small>
+                        <div class="fw-bold" th:text="${student.totalDegree}">450</div>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">النسبة المئوية:</small>
+                        <div class="fw-bold text-primary" th:text="${student.percentage} + '%'">95%</div>
+                    </div>
+                    <div class="col-6">
+                        <small class="text-muted">الترتيب:</small>
+                        <div class="fw-bold" th:text="${student.studentRank}">1</div>
+                    </div>
+                </div>
+
+                <form th:action="@{/natega/showStudentDetails}" method="post">
+                    <input type="hidden" th:name="seatNumber" th:value="${student.seatNumber}">
+                    <input type="hidden" th:name="arabicName" th:value="${student.arabicName}">
+                    <input type="hidden" th:name="totalDegree" th:value="${student.totalDegree}">
+                    <input type="hidden" th:name="percentage" th:value="${student.percentage}">
+                    <input type="hidden" th:name="studentRank" th:value="${student.studentRank}">
+                    <input type="hidden" th:name="rankWithDuplicates" th:value="${student.rankWithDuplicates}">
+                    <button type="submit" class="btn btn-primary btn-sm w-100">
+                        <i class="bi bi-eye"></i> عرض التفاصيل
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Show message if no results on mobile -->
+    <div class="d-md-none text-center py-3" th:if="${#lists.isEmpty(students)}">
+        <div class="text-muted">لا توجد نتائج للعرض</div>
+    </div>
+
     <div th:if="${searching}" style="margin-bottom: 20px;">.</div>
 
-
+    <!-- Hidden form for bulk PDF download (preserved) -->
     <form id="bulkPdfForm" action="/natega/students/downloadPdf" method="post" style="display: none;">
         <input type="hidden" name="studentData" id="studentData">
     </form>
 
+    <!-- Preserved original JavaScript -->
     <script th:inline="javascript">
         document.addEventListener('DOMContentLoaded', function() {
-
             var studentsData = /*[[${students}]]*/ [];
-
             document.getElementById('downLoadAllBtn').addEventListener('click', function() {
                 document.getElementById('studentData').value = JSON.stringify(studentsData);
                 document.getElementById('bulkPdfForm').submit();
             });
         });
     </script>
-
 </div>
 </body>
 </html>

@@ -8,7 +8,6 @@
 </head>
 <body>
 <section layout:fragment="content">
-
     <form id="studentForm" method="post" th:action="@{/natega/searchByName}" th:object="${nameForm}">
         <div class="form-group">
             <div class="d-flex gap-2">
@@ -25,18 +24,12 @@
         <div class="form-check my-2">
             <input class="form-check-input" type="checkbox" th:field="*{isMidName}" id="isMidNameInput">
             <label class="form-check-label" for="isMidNameInput">
-                 البحث باسم الأب أو العائلة
+                البحث باسم الأب أو العائلة
             </label>
         </div>
-
     </form>
-
-
     <div th:if="${students}" th:replace="~{fragments/students-table :: studentsTableFragment(${students},true)}"></div>
-
     <div th:if="${error}" class="alert alert-danger mt-2" th:text="${error}"></div>
-
-
 </section>
 </body>
 </html>

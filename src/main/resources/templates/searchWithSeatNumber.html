@@ -6,16 +6,11 @@
 <head>
     <title layout:title="Search by Seat Number">Search</title>
 </head>
-
-
 <body>
-
 <section layout:fragment="content">
-
     <!-- Form -->
     <form id="studentForm" method="post" th:action="@{/natega/searchWithSeatNumber}" th:object="${seatNumberForm}">
         <div class="form-group">
-
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-primary">بحث</button>
                 <input type="text" th:field="*{seatNumber}" class="form-control" id="seatNumberInput"
@@ -24,13 +19,10 @@
             </div>
         </div>
     </form>
-
     <!-- Student Result -->
     <div th:if="${student}" th:replace="~{fragments/student-view :: studentFragment(${student},false)}"></div>
-
     <!-- Error Message -->
     <div th:if="${error}" class="alert alert-danger mt-2" th:text="${error}"></div>
-
 </section>
 </body>
 </html>
