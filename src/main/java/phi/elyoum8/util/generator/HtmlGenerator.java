@@ -3,6 +3,8 @@ package phi.elyoum8.util.generator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -12,6 +14,7 @@ import phi.elyoum8.model.Student;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -116,60 +119,6 @@ public class HtmlGenerator {
         }
     }
 
-
-    private static final String HTML_TEMPLATE;
-    static {
-        try {
-            HTML_TEMPLATE = new String(Files.readAllBytes(Paths.get("src/main/resources/templates/"+DIRECTORY_NAME+"Student_manual_response_template.html")));
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load HTML template", e);
-        }
-    }
-
-    @Deprecated
-    public String generateHtmlManually(Student student)
-    {
-        String seatNumber = student.getSeatNumber().toString();
-        String arabicName =student.getArabicName();
-        String totalDegree = student.getTotalDegree().toString();
-        String percentage = student.getPercentage().toString();
-        String rank = student.getStudentRank().toString();
-        String rankWithDuplicates = student.getRankWithDuplicates().toString();
-
-        String htmlContent = HTML_TEMPLATE
-                .replace("SEAT_NUMBER", seatNumber)
-                .replace("ARABIC_NAME", arabicName)
-                .replace("TOTAL_DEGREE", totalDegree)
-                .replace("PERCENTAGE", percentage)
-                .replace("RANK", rank)
-                .replace("RANK_WITH_DUPLICATES", rankWithDuplicates);
-
-        return htmlContent;
-    }
-
-    @Deprecated
-    private void saveHtmlFile(String seatNumber,String htmlContent)
-    {
-        Path tempDir=null;
-        try {
-             tempDir = Files.createTempDirectory("temp_students_documents");
-        }catch (IOException e){
-            log.error("Failed to create temporary directory", e );
-        }
-        File htmlFile = new File(tempDir.toFile(), generateFileName(seatNumber,"html"));
-        try (FileWriter writer = new FileWriter(htmlFile)) {
-            writer.write(htmlContent);
-        }catch (IOException e){
-            log.error("Failed to save html file for student with Seat Number:{}", seatNumber );
-        }
-    }
-
-    @Deprecated
-    private void generateAndSaveHtml(Student student)
-    {
-        String html = generateHtmlManually(student);
-        saveHtmlFile(student.getSeatNumber().toString(), html);
-    }
 
     @Deprecated
     public static String generateFileName(String seatNumber,String extention)

@@ -1,0 +1,37 @@
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: natega_postgres
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 1
+      POSTGRES_DB: natega
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - natega-net
+
+  natega-api:
+    build: .
+    container_name: natega-api
+    depends_on:
+      - postgres
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/natega
+      DB_USERNAME: root
+      DB_PASSWORD: 1
+    ports:
+      - "8080:8080"
+    networks:
+      - natega-net
+
+
+volumes:
+  postgres-data:
+
+networks:
+  natega-net:
+    driver: bridge

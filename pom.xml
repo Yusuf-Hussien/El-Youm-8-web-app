@@ -149,6 +149,7 @@
         </repository>
     </repositories>
     <build>
+        <finalName>natega-api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
