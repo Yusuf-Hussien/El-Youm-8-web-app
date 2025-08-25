@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>phi</groupId>
-    <artifactId>El-Youm-8</artifactId>
+    <artifactId>El-Youm-8-web-app</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>El-Youm-8</name>
     <description>El-Youm-8</description>
