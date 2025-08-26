@@ -13,6 +13,7 @@
 - 🖥️ **MVC Web Interface**: User-friendly interface built with Thymeleaf.
 - 💥 **Robust Error Handling**: Comprehensive exception handling and form validation.
 - 📦 **Efficient Data Migration**: Batch imports from Excel to the database with asynchronous insertions.
+- 🐳 **Docker Support**: Run the application easily using Docker and Docker Compose.
 
 ---
 
@@ -24,6 +25,8 @@
 - **Concurrency**: ExecutorService (for async batch inserts)
 - **Database**:  MySQL or (PostgreSQL supported)
 - **Build Tool**: Maven
+- **Containerization**: Docker & Docker Compose
+
 
 ---
 
@@ -79,7 +82,13 @@ spring.jpa.hibernate.ddl-auto=update
 ```bash
 ./mvnw spring-boot:run
 ```
-Alternatively, import and run the project from your preferred IDE.
+
+
+### OR. Run with Docker (Recommended for Production)
+```bash
+docker-compose up --build
+```
+
 
 ### 4. Data Import (Migration)
 To import Thanaweya Amma results from an Excel sheet:
