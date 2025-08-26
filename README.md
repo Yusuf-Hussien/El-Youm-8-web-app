@@ -100,6 +100,16 @@ To import Thanaweya Amma results from an Excel sheet:
 
 ---
 
+### You can access the WEB App:
+```bash
+http://localhost:8080/natega
+```
+
+### You can access the API Documentation:
+```bash
+http://localhost:8080/docs
+```
+
 ## 🌍 API Endpoints
 ![ApiEndPoints.png](preview/ApiEndpoints.png)
 ---

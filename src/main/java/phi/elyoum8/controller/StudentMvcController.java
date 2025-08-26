@@ -23,7 +23,7 @@ import phi.elyoum8.util.validation.CustomValidator;
 import java.util.List;
 
 @Controller
-@RequestMapping({"natega"})
+@RequestMapping({"natega",""})
 public class StudentMvcController {
 
     private final StudentService studentService;
