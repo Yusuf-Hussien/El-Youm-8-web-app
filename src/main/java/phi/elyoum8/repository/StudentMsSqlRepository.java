@@ -15,11 +15,11 @@ import java.util.List;
 public interface StudentMsSqlRepository extends StudentRepository {
 
     @Override
-    @Query(value = "SELECT * FROM student WHERE arabic_name LIKE :name + '%'", nativeQuery = true)
+    @Query(value = "SELECT * FROM student WHERE normalized_arabic_name LIKE :name + '%'", nativeQuery = true)
     List<Student> findAllStudentsByNameStartsWith(@Param("name") String name);
 
     @Override
-    @Query(value = "SELECT * FROM student WHERE arabic_name LIKE '%' + :name + '%'", nativeQuery = true)
+    @Query(value = "SELECT * FROM student WHERE normalized_arabic_name LIKE '%' + :name + '%'", nativeQuery = true)
     List<Student> findAllStudentsByNameContains(@Param("name") String name);
 
     @Override

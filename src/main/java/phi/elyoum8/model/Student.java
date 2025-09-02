@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import phi.elyoum8.util.genric.ArabicNameNormalizer;
 
 @Entity
 @Setter
@@ -13,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name="student"
-        ,indexes = {@Index(name = "idx_arabic_name",columnList = "arabic_name")
+        ,indexes = {@Index(name = "idx_normalized_arabic_name",columnList = "normalized_arabic_name")
                    ,@Index(name = "idx_student_percentage_name", columnList = "percentage DESC, arabic_name ASC")})
 public class Student {
 
@@ -23,6 +24,10 @@ public class Student {
 
     @Column(name = "arabic_name")
     String arabicName;
+
+    @Column(name = "normalized_arabic_name")
+    String normalizedArabicName;
+
 
     @Column(name = "total_degree")
     Double totalDegree;
@@ -34,6 +39,11 @@ public class Student {
 
     @Column(name = "rank_with_duplicates")
     Long rankWithDuplicates;
+
+    public void setArabicName(String arabicName) {
+        this.arabicName = arabicName;
+        this.normalizedArabicName = ArabicNameNormalizer.normalize(arabicName);
+    }
 
     public void setTotalDegree(double totalDegree)
     {

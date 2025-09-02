@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import phi.elyoum8.exception.StudentNotFoundException;
 import phi.elyoum8.model.Student;
 import phi.elyoum8.repository.StudentRepository;
+import phi.elyoum8.util.genric.ArabicNameNormalizer;
 import phi.elyoum8.util.validation.CustomValidator;
 
 import java.util.List;
@@ -38,9 +39,11 @@ public class StudentRestService extends StudentService{
         if(!CustomValidator.isValidArabicName(name))
             throw new RuntimeException("Invalid input it's not an arabic name");
 
-        var students = spellCheck ?
-                super.findByNameUsingSpillCheck(name,isMidName) :
-                super.findByNameIgnoreSpillCheck(name,isMidName);
+        if(!spellCheck) name = ArabicNameNormalizer.normalize(name);
+        var students = isMidName ?
+                        studentRepository.findAllStudentsByNameContains(name):
+                        studentRepository.findAllStudentsByNameStartsWith(name);
+
 
         if(students.isEmpty()) throw new StudentNotFoundException("No student with name '" + name + "' exists");
 

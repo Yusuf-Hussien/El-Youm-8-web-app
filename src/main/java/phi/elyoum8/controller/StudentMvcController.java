@@ -92,7 +92,7 @@ public class StudentMvcController {
 
         List<Student> students = studentService.findByName(
                 nameForm.getText(),
-                nameForm.getIsMidName()? true : nameForm.getSpellCheck(),
+                nameForm.getSpellCheck(),
                 nameForm.getIsMidName()
         );
 
