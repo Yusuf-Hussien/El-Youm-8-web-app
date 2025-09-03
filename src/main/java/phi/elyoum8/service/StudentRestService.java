@@ -39,8 +39,9 @@ public class StudentRestService extends StudentService{
         if(!CustomValidator.isValidArabicName(name))
             throw new RuntimeException("Invalid input it's not an arabic name");
 
-        if(!spellCheck) name = ArabicNameNormalizer.normalize(name);
-        var students = isMidName ?
+        List<Student> students;
+        if(!spellCheck) students = super.findByNormalizedName(name,isMidName);
+        else students = isMidName ?
                         studentRepository.findAllStudentsByNameContains(name):
                         studentRepository.findAllStudentsByNameStartsWith(name);
 
@@ -51,6 +52,7 @@ public class StudentRestService extends StudentService{
 
         return students;
     }
+
 
 
     @Override

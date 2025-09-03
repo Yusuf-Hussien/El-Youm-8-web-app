@@ -22,11 +22,18 @@ public interface StudentRepository extends JpaRepository<Student, Long> {
 
     Page<Student> findAllByOrderByPercentageDescArabicNameAsc(Pageable pageable);
 
-    @Query(value = "SELECT * FROM student WHERE normalized_arabic_name LIKE CONCAT(:name, '%')", nativeQuery = true)
+    @Query(value = "SELECT * FROM student WHERE arabic_name LIKE CONCAT(:name, '%')", nativeQuery = true)
     List<Student> findAllStudentsByNameStartsWith(@Param("name") String name);
 
-    @Query(value = "SELECT * FROM student WHERE normalized_arabic_name LIKE CONCAT('%',:name, '%')", nativeQuery = true)
+    @Query(value = "SELECT * FROM student WHERE arabic_name LIKE CONCAT('%',:name, '%')", nativeQuery = true)
     List<Student> findAllStudentsByNameContains(@Param("name") String name);
+
+    @Query(value = "SELECT * FROM student WHERE normalized_arabic_name LIKE CONCAT(:name, '%')", nativeQuery = true)
+    List<Student> findAllStudentsByNormalizedNameStartsWith(@Param("name") String name);
+
+    @Query(value = "SELECT * FROM student WHERE normalized_arabic_name LIKE CONCAT('%',:name, '%')", nativeQuery = true)
+    List<Student> findAllStudentsByNormalizedNameContains(@Param("name") String name);
+
 
 
     @Query(value = """

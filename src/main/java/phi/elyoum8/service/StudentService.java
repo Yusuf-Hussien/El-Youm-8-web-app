@@ -30,11 +30,19 @@ public abstract class StudentService {
     public List<Student> findByName(String name,Boolean spellCheck,Boolean isMidName) {
         if(!CustomValidator.isValidArabicName(name))
             throw new RuntimeException("Invalid input it's not an arabic name");
-        if(!spellCheck) name = ArabicNameNormalizer.normalize(name);
+        if(!spellCheck) return findByNormalizedName(name,isMidName);
         return
                 isMidName ?
                         studentRepository.findAllStudentsByNameContains(name):
                         studentRepository.findAllStudentsByNameStartsWith(name);
+    }
+
+    protected List<Student> findByNormalizedName(String name,Boolean isMidName) {
+        name = ArabicNameNormalizer.normalize(name);
+        return
+                isMidName ?
+                        studentRepository.findAllStudentsByNormalizedNameContains(name):
+                        studentRepository.findAllStudentsByNormalizedNameStartsWith(name);
     }
 
 }
